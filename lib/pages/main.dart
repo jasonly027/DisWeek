@@ -1,6 +1,7 @@
-import 'package:dis_week/task_components.dart';
+import 'package:dis_week/pages/dailyView.dart';
 import 'package:flutter/material.dart';
-import 'theme/color_schemes.g.dart';
+import 'package:dis_week/theme/color_schemes.g.dart';
+import 'package:dis_week/utils/task.dart';
 
 void main() {
   runApp(const DisWeek());
@@ -35,7 +36,7 @@ class _NotesState extends State<Notes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.onBackground,
         title: Text(widget.title,
               style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
@@ -61,7 +62,7 @@ class _NotesState extends State<Notes> {
       ),
       body:
       Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: createDailyView(context, tempList),
       ),
     );
