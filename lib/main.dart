@@ -13,8 +13,8 @@ class DisWeek extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DisWeek',
-      theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       home: const Notes(title: 'Today'),
     );
   }
@@ -60,10 +60,10 @@ class _NotesState extends State<Notes> {
         ],
       ),
       body:
-          Container(
-            margin: EdgeInsets.all(30),
-            child: createDailyView(context, tempList),
-          ),
+      Container(
+        margin: EdgeInsets.all(20),
+        child: createDailyView(context, tempList),
+      ),
     );
   }
 }
