@@ -8,7 +8,7 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
   double mqTextScaleFactor = MediaQuery.of(context).textScaleFactor;
 
   return ListView.separated(
-    separatorBuilder: (context, _) => const SizedBox(height: 10),
+    separatorBuilder: (context, _) => const SizedBox(height: 15),
     itemCount: taskList.length,
     itemBuilder: (BuildContext context, int index) {
       return ElevatedButton(
@@ -33,14 +33,14 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _drawTaskTitle(taskList[index].task, themeColor, mqTextScaleFactor),
-                      _drawTaskDue(taskList[index].due, themeColor, mqTextScaleFactor),
+                      _drawTaskTitle(taskList[index].task, themeColor),
+                      _drawTaskDue(taskList[index].due, themeColor),
                     ],
                   ),
                 ),
                 Flexible(
                     flex: 2,
-                    child: _drawTaskProgress(taskList[index].progress, themeColor, mqTextScaleFactor)),
+                    child: _drawTaskProgress(taskList[index].progress, themeColor)),
               ],
             ),
             _drawTaskTags(taskList[index].tags, themeColor, mqTextScaleFactor),
@@ -51,7 +51,7 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
   );
 }
 
-Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor, double mqTextScaleFactor) {
+Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor) {
   return Container(
     margin: const EdgeInsets.all(2),
     padding: const EdgeInsets.symmetric(vertical: 2,horizontal: 4),
@@ -60,7 +60,6 @@ Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor, double mqTextSca
       color: themeColor.surface,
     ),
     child: Text(taskTitle,
-        textScaleFactor: mqTextScaleFactor,
         style: TextStyle(
             color: themeColor.onSurface,
             fontWeight: FontWeight.bold,
@@ -68,14 +67,13 @@ Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor, double mqTextSca
   );
 }
 
-Widget _drawTaskDue(DateTime? taskDue, ColorScheme themeColor, double mqTextScaleFactor) {
+Widget _drawTaskDue(DateTime? taskDue, ColorScheme themeColor) {
   if (taskDue == null) {return Container();}
   String monthDay = DateFormat.MMMMd().format(taskDue);
 
   return Container(
     margin: const EdgeInsets.all(2),
     child: Text("Due $monthDay",
-        textScaleFactor: mqTextScaleFactor,
         style: TextStyle(
           color: themeColor.secondary,
           fontWeight: FontWeight.bold,
@@ -84,7 +82,7 @@ Widget _drawTaskDue(DateTime? taskDue, ColorScheme themeColor, double mqTextScal
   );
 }
 
-Widget _drawTaskProgress(Progress progress, ColorScheme themeColor, double mqTextScaleFactor) {
+Widget _drawTaskProgress(Progress progress, ColorScheme themeColor) {
   return Container(
     margin: const EdgeInsets.all(2),
     child: IconButton.filled(
