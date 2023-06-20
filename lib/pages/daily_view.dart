@@ -42,7 +42,8 @@ class _DailyViewState extends State<DailyView> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const TaskView(title: "New Task")));
+                      builder: (context) =>
+                          TaskView(title: "New Task", task: tempList[0])));
             },
           )
         ],
@@ -60,7 +61,7 @@ var tempList = [
     'urgent',
     'animal',
     'go home',
-    'asaaaaaaaaaaaaaaaaaaaaaaaaa',
+    'djflahsdflaaaaaaaa12312312',
     'bbbbbbbbbbbbbbb',
     'casdasdasdasdasdasdas',
     'd'

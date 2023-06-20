@@ -3,72 +3,68 @@ import 'package:dis_week/utils/task.dart';
 import 'package:flutter/material.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({Key? key, required this.title}) : super(key: key);
+  TaskView({Key? key, required this.title, required this.task})
+      : super(key: key);
   final String title;
+  Task task;
 
   @override
   State<TaskView> createState() => _TaskViewState();
 }
 
 class _TaskViewState extends State<TaskView> {
-  final _titleController = TextEditingController(text: 'Untitled');
-  // Task task = Task(task: _titleController.toString(), )
+  final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     ColorScheme themeColor = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeColor.onBackground,
-        title: Text(widget.title,
-          style: TextStyle(color: themeColor.onPrimary),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const BackButtonIcon(),
-          color: themeColor.onPrimary,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.menu),
+        appBar: AppBar(
+          backgroundColor: themeColor.onBackground,
+          title: Text(
+            widget.title,
+            style: TextStyle(color: themeColor.onPrimary),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const BackButtonIcon(),
             color: themeColor.onPrimary,
             onPressed: () {
-
+              Navigator.pop(context);
             },
-          )
-        ],
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Title",
-              style: headerFontStyle(color: themeColor.primary)),
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                hintText: 'Untitled',
-                filled: true,
-                fillColor: themeColor.primaryContainer,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(10)
-                )
-              )
-            ),
-            ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: ,
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.menu),
+              color: themeColor.onPrimary,
+              onPressed: () {},
             )
           ],
         ),
-      )
-    );
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                makeHeaderText(
+                    text: "Task Name", color: themeColor.primary, marginTop: 0),
+                makeTitleField(
+                    controller: _nameController, themeColor: themeColor),
+                makeHeaderText(text: "Tags", color: themeColor.primary),
+                makeTagList(tags: widget.task.tags, themeColor: themeColor),
+                makeHeaderText(text: "Due", color: themeColor.primary),
+                makeDueButton(widget.task.due, themeColor),
+                makeHeaderText(text: "Checklist", color: themeColor.primary),
+                //
+                makeHeaderText(text: "Description", color: themeColor.primary),
+                makeDescriptionField(
+                    controller: _descriptionController, themeColor: themeColor),
+              ],
+            ),
+          ),
+        ));
   }
 }
