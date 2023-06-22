@@ -1,15 +1,32 @@
+import 'dart:collection';
+
 enum Progress { incomplete, complete, checklist }
 
+class Check {
+  String title;
+  bool isChecked;
+
+  Check({
+    required this.title,
+    this.isChecked = false
+  });
+}
+
 class Task {
-  String task;
+  String? title;
   DateTime? due;
-  List<String> tags;
+  List<String>? tags;
   Progress progress;
+  List<Check>? checklist;
+  String? description;
 
   Task({
-    this.task = 'Untitled',
+    this.title,
     this.due,
-    required this.tags,
-    this.progress = Progress.incomplete
+    this.tags,
+    this.progress = Progress.incomplete,
+    this.checklist,
+    this.description
   } );
+
 }

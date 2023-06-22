@@ -1,3 +1,4 @@
+import 'package:dis_week/pages/task_view.dart';
 import 'package:dis_week/utils/task.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +12,12 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
     itemCount: taskList.length,
     itemBuilder: (BuildContext context, int index) {
       return ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TaskView.edit(task: taskList[index])));
+        },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(10),
           backgroundColor: themeColor.surfaceVariant,
@@ -29,7 +35,8 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _drawTaskTitle(taskList[index].task, themeColor),
+                      _drawTaskTitle(
+                          title: taskList[index].title, themeColor: themeColor),
                       _drawTaskDue(taskList[index].due, themeColor),
                     ],
                   ),
@@ -40,7 +47,10 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
                         taskList[index].progress, themeColor)),
               ],
             ),
-            _drawTaskTags(taskList[index].tags, themeColor, mqTextScaleFactor),
+            _drawTaskTags(
+                tags: taskList[index].tags,
+                themeColor: themeColor,
+                textScaleFactor: mqTextScaleFactor),
           ],
         ),
       );
@@ -48,7 +58,10 @@ Widget createDailyView(BuildContext context, List<Task> taskList) {
   );
 }
 
-Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor) {
+Widget _drawTaskTitle(
+    {required String? title, required ColorScheme themeColor}) {
+  title = title ?? 'Untitled';
+
   return Container(
     margin: const EdgeInsets.all(2),
     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
@@ -56,7 +69,7 @@ Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor) {
       borderRadius: const BorderRadius.all(Radius.circular(5)),
       color: themeColor.surface,
     ),
-    child: Text(taskTitle,
+    child: Text(title,
         style: TextStyle(
           color: themeColor.onSurface,
           fontWeight: FontWeight.bold,
@@ -67,7 +80,7 @@ Widget _drawTaskTitle(String taskTitle, ColorScheme themeColor) {
 
 Widget _drawTaskDue(DateTime? taskDue, ColorScheme themeColor) {
   if (taskDue == null) {
-    return Container();
+    return SizedBox.shrink();
   }
   String monthDay = DateFormat.MMMMd().format(taskDue);
 
@@ -103,9 +116,15 @@ Widget _drawTaskProgress(Progress progress, ColorScheme themeColor) {
 }
 
 Widget _drawTaskTags(
-    List<String> tags, ColorScheme themeColor, double mqTextScaleFactor) {
+    {List<String>? tags,
+    required ColorScheme themeColor,
+    required double textScaleFactor}) {
+  if (tags == null) {
+    return const SizedBox.shrink();
+  }
+
   return SizedBox(
-    height: 28 * mqTextScaleFactor,
+    height: 28 * textScaleFactor,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       // separatorBuilder: (context, _) => const SizedBox(width: 0),

@@ -19,7 +19,7 @@ class _DailyViewState extends State<DailyView> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: themeColor.onBackground,
+        backgroundColor: themeColor.primary,
         title: Text(
           widget.title,
           style: TextStyle(color: themeColor.onPrimary),
@@ -43,7 +43,7 @@ class _DailyViewState extends State<DailyView> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          TaskView(title: "New Task", task: tempList[0])));
+                          TaskView()));
             },
           )
         ],
@@ -57,14 +57,24 @@ class _DailyViewState extends State<DailyView> {
 }
 
 var tempList = [
-  Task(due: DateTime.now().toLocal(), tags: [
-    'urgent',
-    'animal',
-    'go home',
-    'djflahsdflaaaaaaaa12312312',
-    'bbbbbbbbbbbbbbb',
-    'casdasdasdasdasdasdas',
-    'd'
-  ]),
+  Task(
+    title: "Mango",
+    due: DateTime.now().toLocal(),
+    tags: [
+      'urgent',
+      'animal',
+      'go home',
+      'djflahsdflaaaaaaaa12312312',
+      'bbbbbbbbbbbbbbb',
+      'casdasdasdasdasdasdas',
+      'd'
+    ],
+    checklist: [
+      Check(title: "Hi Joe", isChecked: true),
+      Check(title: "Badger")
+    ],
+    description: "Hello",
+  ),
   Task(due: DateTime.now().toLocal(), tags: ['late', 'home']),
+  Task(tags: ['guy', 'dog'])
 ];
