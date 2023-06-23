@@ -54,95 +54,19 @@ class _TaskViewState extends State<TaskView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                headerText(
-                    text: "Task Name", theme: theme, marginTop: 0),
-                titleField(task: widget.task, theme: theme),
-                headerText(text: "Tags", theme: theme),
-                tagsList(tags: widget.task.tags, theme: theme),
-                headerText(text: "Due", theme: theme),
-                dueButton(date: widget.task.due, theme: theme),
-                headerText(text: "Checklist", theme: theme),
-                makeChecklist(
-                    checklist: widget.task.checklist, theme: theme),
-                headerText(text: "Description", theme: theme),
+                const headerText( text: "Task Name", marginTop: 0),
+                titleField(task: widget.task),
+                const headerText(text: "Tags"),
+                tagsList(tags: widget.task.tags),
+                const headerText(text: "Due"),
+                dueButton(date: widget.task.due),
+                const headerText(text: "Checklist"),
+                checklist(checks: widget.task.checklist),
+                const headerText(text: "Description"),
                 descriptionField( task: widget.task, theme: theme),
               ],
             ),
           ),
         ));
-  }
-
-
-  Widget makeChecklist({List<Check>? checklist, required ColorScheme theme}) {
-    return Container(
-      margin: const EdgeInsets.only(top: 3),
-      decoration: BoxDecoration(
-          border: Border.all(color: theme.inversePrimary),
-          borderRadius: BorderRadius.circular(10)),
-      child: Column(
-        children: [
-          checklist != null
-              ? ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: checklist.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Checkbox(
-                              value: checklist[index].isChecked,
-                              activeColor: theme.primary,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checklist[index].isChecked = value!;
-                                });
-                              }),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: TextFormField(
-                            initialValue: checklist[index].title,
-                            textInputAction: TextInputAction.done,
-                            onChanged: (text) {
-                              checklist[index].title = text;
-                            },
-                            onTapOutside: (context) {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                            },
-                            maxLines: null,
-                            style: const TextStyle(fontSize: 17),
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(5),
-                                border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                )
-              : const SizedBox.shrink(),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton(
-                onPressed: () {
-                  setState(() {
-                    widget.task.checklist ??= <Check>[];
-                    widget.task.checklist!.add(Check());
-                  });
-                },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.only(top: 15, bottom: 15),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0)),
-                ),
-                child: const Text(
-                  'Add Item',
-                  style: TextStyle(fontSize: 16),
-                )),
-          )
-        ],
-      ),
-    );
   }
 }

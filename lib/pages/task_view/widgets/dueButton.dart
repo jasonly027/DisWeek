@@ -6,14 +6,14 @@ class dueButton extends StatelessWidget {
   const dueButton({
     super.key,
     required this.date,
-    required this.theme
   });
 
   final DateTime? date;
-  final ColorScheme theme;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     String due;
     if (date == null) {
       due = "Add a Due Date";
@@ -30,7 +30,7 @@ class dueButton extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10))),
           child: headerText(
-              text: due, theme: theme, marginTop: 0)),
+              text: due, marginTop: 0)),
     );
   }
 }

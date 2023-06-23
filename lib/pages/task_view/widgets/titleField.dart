@@ -6,14 +6,14 @@ class titleField extends StatelessWidget {
   const titleField({
     super.key,
     required this.task,
-    required this.theme
   });
 
   final Task task;
-  final ColorScheme theme;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     return TextFormField(
       initialValue: task.title,
       style: const TextStyle(fontSize: 19),

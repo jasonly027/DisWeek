@@ -4,19 +4,19 @@ class tagsList extends StatefulWidget {
   const tagsList({
     super.key,
     required this.tags,
-    required this.theme
   });
 
   final List<String>? tags;
-  final ColorScheme theme;
 
   @override
-  State<tagsList> createState() => tagsListState();
+  State<tagsList> createState() => _tagsListState();
 }
 
-class tagsListState extends State<tagsList> {
+class _tagsListState extends State<tagsList> {
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     return Wrap(children: [
         ...?widget.tags
             ?.map((item) => tagButton(
@@ -25,14 +25,14 @@ class tagsListState extends State<tagsList> {
                 widget.tags?.remove(item);
               });
             },
-            textColor: widget.theme.onSurface,
-            backgroundColor: widget.theme.inversePrimary,
+            textColor: theme.onSurface,
+            backgroundColor: theme.inversePrimary,
             title: item))
             .toList(),
         tagButton(
             onPressed: () {},
-            textColor: widget.theme.onSurface,
-            backgroundColor: widget.theme.tertiaryContainer,
+            textColor: theme.onSurface,
+            backgroundColor: theme.tertiaryContainer,
             title: "Add Tag")
       ]);
   }
