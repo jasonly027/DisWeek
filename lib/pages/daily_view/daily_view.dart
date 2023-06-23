@@ -125,6 +125,6 @@ var tempList = [
     ],
     description: "Hello",
   ),
-  Task(due: DateTime.now().toLocal(), tags: ['late', 'home']),
-  Task(tags: ['guy', 'dog'])
+  Task(due: DateTime.now().toLocal(), tags: ['late', 'home'], checklist: <Check>[]),
+  Task(tags: ['guy', 'dog'], checklist: <Check>[])
 ];

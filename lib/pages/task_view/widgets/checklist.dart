@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../utils/task.dart';
 
 class checklist extends StatefulWidget {
-  checklist({
+  const checklist({
     super.key,
     required this.checks,
   });
 
-  List<Check>? checks;
+  final List<Check> checks;
 
   @override
   State<checklist> createState() => _checklistState();
@@ -26,32 +26,34 @@ class _checklistState extends State<checklist> {
           borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
-          widget.checks == null
+          widget.checks.isEmpty
               ? const SizedBox.shrink()
               : ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.checks!.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.checks.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Row(
+                      key: UniqueKey(),
                       children: [
                         Expanded(
                           flex: 2,
                           child: Checkbox(
-                              value: widget.checks![index].isChecked,
+                              value: widget.checks[index].isChecked,
                               activeColor: theme.primary,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  widget.checks![index].isChecked = value!;
+                                  widget.checks[index].isChecked = value!;
                                 });
                               }),
                         ),
                         Expanded(
-                          flex: 8,
+                          flex: 9,
                           child: TextFormField(
-                            initialValue: widget.checks![index].title,
+                            initialValue: widget.checks[index].title,
                             textInputAction: TextInputAction.done,
                             onChanged: (text) {
-                              widget.checks![index].title = text;
+                              widget.checks[index].title = text;
                             },
                             onTapOutside: (context) {
                               FocusManager.instance.primaryFocus?.unfocus();
@@ -63,17 +65,75 @@ class _checklistState extends State<checklist> {
                                 border: InputBorder.none),
                           ),
                         ),
+                        Expanded(
+                          flex: 2,
+                          child: IconButton(
+                            onPressed: (){
+                              setState(() {
+                                widget.checks.removeAt(index);
+                              });
+                            },
+                            icon: const Icon(Icons.close),
+                          )
+                        )
                       ],
                     );
                   },
                 ),
+              // : ListView(
+              //     shrinkWrap: true,
+              //     children: widget.checks
+              //         .map((item) => Row(
+              //               children: [
+              //                 Expanded(
+              //                   flex: 2,
+              //                   child: Checkbox(
+              //                       value: item.isChecked,
+              //                       activeColor: theme.primary,
+              //                       onChanged: (bool? value) {
+              //                         setState(() {
+              //                           item.isChecked = value!;
+              //                         });
+              //                       }),
+              //                 ),
+              //                 Expanded(
+              //                   flex: 9,
+              //                   child: TextFormField(
+              //                     initialValue: item.title,
+              //                     textInputAction: TextInputAction.done,
+              //                     onChanged: (text) {
+              //                       item.title = text;
+              //                     },
+              //                     onTapOutside: (context) {
+              //                       FocusManager.instance.primaryFocus
+              //                           ?.unfocus();
+              //                     },
+              //                     maxLines: null,
+              //                     style: const TextStyle(fontSize: 17),
+              //                     decoration: const InputDecoration(
+              //                         contentPadding: EdgeInsets.all(5),
+              //                         border: InputBorder.none),
+              //                   ),
+              //                 ),
+              //                 Expanded(
+              //                     flex: 2,
+              //                     child: IconButton(
+              //                       onPressed: () {
+              //                         setState(() {
+              //                           widget.checks.remove(item);
+              //                         });
+              //                       },
+              //                       icon: const Icon(Icons.close),
+              //                     ))
+              //               ],
+              //             ))
+              //         .toList()),
           SizedBox(
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
                   setState(() {
-                    widget.checks ??= <Check>[];
-                    widget.checks!.add(Check());
+                    widget.checks.add(Check());
                   });
                 },
                 style: TextButton.styleFrom(

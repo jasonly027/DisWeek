@@ -28,6 +28,7 @@ class titleField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10))),
       onChanged: (text) {
         task.title = text;
+        if (task.title!.isEmpty) task.title = null;
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

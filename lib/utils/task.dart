@@ -16,7 +16,7 @@ class Task {
   DateTime? due;
   List<String>? tags;
   Progress progress;
-  List<Check>? checklist;
+  List<Check> checklist;
   String? description;
 
   Task({
@@ -24,8 +24,8 @@ class Task {
     this.due,
     this.tags,
     this.progress = Progress.incomplete,
-    this.checklist,
+    required this.checklist,
     this.description
-  } );
+  });
 
 }

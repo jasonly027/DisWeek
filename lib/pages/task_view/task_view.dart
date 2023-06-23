@@ -5,7 +5,7 @@ import 'widgets/widgets.dart';
 class TaskView extends StatefulWidget {
   TaskView({Key? key})
       : title = "New Task",
-        task = Task(),
+        task = Task(checklist: <Check>[]),
         super(key: key);
 
   const TaskView.edit({Key? key, required this.task})
@@ -63,7 +63,7 @@ class _TaskViewState extends State<TaskView> {
                 const headerText(text: "Checklist"),
                 checklist(checks: widget.task.checklist),
                 const headerText(text: "Description"),
-                descriptionField( task: widget.task, theme: theme),
+                descriptionField( task: widget.task),
               ],
             ),
           ),

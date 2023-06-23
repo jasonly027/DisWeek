@@ -5,14 +5,14 @@ class descriptionField extends StatelessWidget {
   const descriptionField({
     super.key,
     required this.task,
-    required this.theme
   });
 
   final Task task;
-  final ColorScheme theme;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     return TextFormField(
       initialValue: task.description,
       maxLines: null,
@@ -26,6 +26,7 @@ class descriptionField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10))),
       onChanged: (text) {
         task.description = text;
+        if (task.description!.isEmpty) task.description = null;
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
