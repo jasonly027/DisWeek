@@ -1,6 +1,6 @@
-import 'package:dis_week/pages/task_view_helper.dart';
 import 'package:dis_week/utils/task.dart';
 import 'package:flutter/material.dart';
+import 'widgets/widgets.dart';
 
 class TaskView extends StatefulWidget {
   TaskView({Key? key})
@@ -8,7 +8,7 @@ class TaskView extends StatefulWidget {
         task = Task(),
         super(key: key);
 
-  TaskView.edit({Key? key, required this.task})
+  const TaskView.edit({Key? key, required this.task})
       : title = "Edit Task",
         super(key: key);
 
@@ -20,32 +20,22 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
-  late TextEditingController _nameController;
-  late TextEditingController _descriptionController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.task.title);
-    _descriptionController =
-        TextEditingController(text: widget.task.description);
-  }
 
   @override
   Widget build(BuildContext context) {
-    ColorScheme themeColor = Theme.of(context).colorScheme;
+    ColorScheme theme = Theme.of(context).colorScheme;
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: themeColor.primary,
+          backgroundColor: theme.primary,
           title: Text(
             widget.title,
-            style: TextStyle(color: themeColor.onPrimary),
+            style: TextStyle(color: theme.onPrimary),
           ),
           centerTitle: true,
           leading: IconButton(
             icon: const BackButtonIcon(),
-            color: themeColor.onPrimary,
+            color: theme.onPrimary,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -53,7 +43,7 @@ class _TaskViewState extends State<TaskView> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.save),
-              color: themeColor.onPrimary,
+              color: theme.onPrimary,
               onPressed: () {},
             )
           ],
@@ -64,24 +54,24 @@ class _TaskViewState extends State<TaskView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                makeHeaderText(
-                    text: "Task Name", color: themeColor.primary, marginTop: 0),
-                makeTitleField(controller: _nameController, theme: themeColor),
-                makeHeaderText(text: "Tags", color: themeColor.primary),
-                makeTagList(tags: widget.task.tags, theme: themeColor),
-                makeHeaderText(text: "Due", color: themeColor.primary),
-                makeDueButton(date: widget.task.due, theme: themeColor),
-                makeHeaderText(text: "Checklist", color: themeColor.primary),
+                headerText(
+                    text: "Task Name", theme: theme, marginTop: 0),
+                titleField(task: widget.task, theme: theme),
+                headerText(text: "Tags", theme: theme),
+                tagsList(tags: widget.task.tags, theme: theme),
+                headerText(text: "Due", theme: theme),
+                dueButton(date: widget.task.due, theme: theme),
+                headerText(text: "Checklist", theme: theme),
                 makeChecklist(
-                    checklist: widget.task.checklist, theme: themeColor),
-                makeHeaderText(text: "Description", color: themeColor.primary),
-                makeDescriptionField(
-                    controller: _descriptionController, theme: themeColor),
+                    checklist: widget.task.checklist, theme: theme),
+                headerText(text: "Description", theme: theme),
+                descriptionField( task: widget.task, theme: theme),
               ],
             ),
           ),
         ));
   }
+
 
   Widget makeChecklist({List<Check>? checklist, required ColorScheme theme}) {
     return Container(
@@ -96,9 +86,6 @@ class _TaskViewState extends State<TaskView> {
                   shrinkWrap: true,
                   itemCount: checklist.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final TextEditingController title =
-                        TextEditingController(text: checklist[index].title);
-
                     return Row(
                       children: [
                         Expanded(
@@ -114,31 +101,22 @@ class _TaskViewState extends State<TaskView> {
                         ),
                         Expanded(
                           flex: 8,
-                            child: TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    checklist[index].isChecked =
-                                        !checklist[index].isChecked;
-                                  });
-                                },
-                                style: TextButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 16),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3),),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: TextField(
-                                    controller: title,
-                                    maxLines: null,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none
-                                    ),
-                                  ),
-                                )),
+                          child: TextFormField(
+                            initialValue: checklist[index].title,
+                            textInputAction: TextInputAction.done,
+                            onChanged: (text) {
+                              checklist[index].title = text;
+                            },
+                            onTapOutside: (context) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            maxLines: null,
+                            style: const TextStyle(fontSize: 17),
+                            decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(5),
+                                border: InputBorder.none),
                           ),
+                        ),
                       ],
                     );
                   },
@@ -148,7 +126,10 @@ class _TaskViewState extends State<TaskView> {
             width: double.infinity,
             child: TextButton(
                 onPressed: () {
-                  // checklist.add()
+                  setState(() {
+                    widget.task.checklist ??= <Check>[];
+                    widget.task.checklist!.add(Check());
+                  });
                 },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.only(top: 15, bottom: 15),

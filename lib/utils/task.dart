@@ -1,13 +1,12 @@
-import 'dart:collection';
 
 enum Progress { incomplete, complete, checklist }
 
 class Check {
-  String title;
+  String? title;
   bool isChecked;
 
   Check({
-    required this.title,
+    this.title,
     this.isChecked = false
   });
 }

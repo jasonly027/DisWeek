@@ -1,6 +1,7 @@
-import 'package:dis_week/pages/daily_view.dart';
+import 'package:dis_week/pages/daily_view/daily_view.dart';
 import 'package:flutter/material.dart';
-import 'package:dis_week/theme/color_schemes.g.dart';
+
+import '../config/color_schemes.g.dart';
 
 void main() {
   runApp(const DisWeek());
