@@ -20,7 +20,6 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
-
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
@@ -38,6 +37,7 @@ class _TaskViewState extends State<TaskView> {
             color: theme.onPrimary,
             onPressed: () {
               Navigator.pop(context);
+              print(widget.task.due);
             },
           ),
           actions: <Widget>[
@@ -54,16 +54,16 @@ class _TaskViewState extends State<TaskView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const headerText( text: "Task Name", marginTop: 0),
+                const headerText(text: "Task Name", marginTop: 0),
                 titleField(task: widget.task),
                 const headerText(text: "Tags"),
                 tagsList(tags: widget.task.tags),
                 const headerText(text: "Due"),
-                dueButton(date: widget.task.due),
+                dueButton(task: widget.task),
                 const headerText(text: "Checklist"),
                 checklist(checks: widget.task.checklist),
                 const headerText(text: "Description"),
-                descriptionField( task: widget.task),
+                descriptionField(task: widget.task),
               ],
             ),
           ),

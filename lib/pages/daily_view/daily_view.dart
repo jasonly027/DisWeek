@@ -5,6 +5,7 @@ import './widgets/widgets.dart';
 
 class DailyView extends StatefulWidget {
   const DailyView({super.key, required this.title});
+
   final String title;
 
   @override
@@ -31,9 +32,7 @@ class _DailyViewState extends State<DailyView> {
           icon: const Icon(Icons.menu),
           color: theme.onPrimary,
           onPressed: () {
-            setState(() {
-
-            });
+            setState(() {});
           },
         ),
         actions: <Widget>[
@@ -42,18 +41,14 @@ class _DailyViewState extends State<DailyView> {
             color: theme.onPrimary,
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          TaskView()));
+                  context, MaterialPageRoute(builder: (context) => TaskView()));
             },
           )
         ],
       ),
       body: Container(
         margin: const EdgeInsets.all(20),
-        child:
-        ListView.separated(
+        child: ListView.separated(
           separatorBuilder: (context, _) => const SizedBox(height: 15),
           itemCount: tasks.length,
           itemBuilder: (BuildContext context, int index) {
@@ -62,13 +57,14 @@ class _DailyViewState extends State<DailyView> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TaskView.edit(task: tasks[index])));
+                        builder: (context) =>
+                            TaskView.edit(task: tasks[index])));
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
                 backgroundColor: theme.surfaceVariant,
-                shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
               ),
               child: Column(
                 children: [
@@ -88,7 +84,8 @@ class _DailyViewState extends State<DailyView> {
                       ),
                       Flexible(
                           flex: 2,
-                          child: progress_indicator(progress: tasks[index].progress, theme: theme)),
+                          child: progress_indicator(
+                              progress: tasks[index].progress, theme: theme)),
                     ],
                   ),
                   tags_list(
@@ -99,8 +96,7 @@ class _DailyViewState extends State<DailyView> {
               ),
             );
           },
-        )
-        ,
+        ),
       ),
     );
   }
@@ -109,7 +105,7 @@ class _DailyViewState extends State<DailyView> {
 var tempList = [
   Task(
     title: "Mango",
-    due: DateTime.now().toLocal(),
+    due: DateTime(2023, 6, 23, 4, 27),
     tags: [
       'urgent',
       'animal',
@@ -125,6 +121,9 @@ var tempList = [
     ],
     description: "Hello",
   ),
-  Task(due: DateTime.now().toLocal(), tags: ['late', 'home'], checklist: <Check>[]),
+  Task(
+      due: DateTime.now().toLocal(),
+      tags: ['late', 'home'],
+      checklist: <Check>[]),
   Task(tags: ['guy', 'dog'], checklist: <Check>[])
 ];
