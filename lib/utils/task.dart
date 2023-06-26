@@ -1,14 +1,10 @@
-
 enum Progress { incomplete, complete, checklist }
 
 class Check {
   String? title;
   bool isChecked;
 
-  Check({
-    this.title,
-    this.isChecked = false
-  });
+  Check({this.title, this.isChecked = false});
 }
 
 class Task {
@@ -16,16 +12,14 @@ class Task {
   DateTime? due;
   List<String>? tags;
   Progress progress;
-  List<Check> checklist;
+  List<Check>? checklist;
   String? description;
 
-  Task({
-    this.title,
-    this.due,
-    this.tags,
-    this.progress = Progress.incomplete,
-    required this.checklist,
-    this.description
-  });
-
+  Task(
+      {this.title,
+      this.due,
+      this.tags,
+      this.progress = Progress.incomplete,
+      this.checklist,
+      this.description});
 }

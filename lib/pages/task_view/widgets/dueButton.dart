@@ -51,17 +51,16 @@ class _dueButtonState extends State<dueButton> {
             child: FittedBox(child: headerText(text: due, marginTop: 0)),
           ),
         ),
-        widget.task.due != null
-            ? Expanded(
-                flex: 1,
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        widget.task.due = null;
-                      });
-                    },
-                    icon: const Icon(Icons.close)))
-            : const SizedBox.shrink(),
+        if (widget.task.due != null)
+          Expanded(
+              flex: 1,
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.task.due = null;
+                    });
+                  },
+                  icon: const Icon(Icons.close)))
       ],
     );
   }

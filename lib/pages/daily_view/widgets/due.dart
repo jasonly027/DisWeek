@@ -8,13 +8,12 @@ class due extends StatelessWidget {
     required this.theme,
   });
 
-  final DateTime? date;
+  final DateTime date;
   final ColorScheme theme;
 
   @override
   Widget build(BuildContext context) {
-    if (date == null) {return const SizedBox.shrink();}
-    String monthDay = DateFormat.MMMMd().format(date!);
+    String monthDay = DateFormat.MMMMd().format(date);
 
     return Container(
       margin: const EdgeInsets.all(2),

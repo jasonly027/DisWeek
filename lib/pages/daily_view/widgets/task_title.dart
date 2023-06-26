@@ -10,10 +10,8 @@ class task_title extends StatelessWidget {
     required this.theme,
   });
 
-
   @override
   Widget build(BuildContext context) {
-
     return Container(
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),

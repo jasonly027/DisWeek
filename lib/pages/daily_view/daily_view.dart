@@ -78,7 +78,8 @@ class _DailyViewState extends State<DailyView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             task_title(title: tasks[index].title, theme: theme),
-                            due(date: tasks[index].due, theme: theme),
+                            if (tasks[index].due != null)
+                              due(date: tasks[index].due!, theme: theme),
                           ],
                         ),
                       ),
@@ -88,10 +89,11 @@ class _DailyViewState extends State<DailyView> {
                               progress: tasks[index].progress, theme: theme)),
                     ],
                   ),
-                  tags_list(
-                      tags: tasks[index].tags,
-                      theme: theme,
-                      txtScaleFactor: txtScaleFactor),
+                  if (tasks[index].tags?.isNotEmpty ?? false)
+                    tags_list(
+                        tags: tasks[index].tags!,
+                        theme: theme,
+                        txtScaleFactor: txtScaleFactor),
                 ],
               ),
             );
@@ -122,8 +124,8 @@ var tempList = [
     description: "Hello",
   ),
   Task(
-      due: DateTime.now().toLocal(),
-      tags: ['late', 'home'],
-      checklist: <Check>[]),
-  Task(tags: ['guy', 'dog'], checklist: <Check>[])
+    due: DateTime.now().toLocal(),
+    tags: ['late', 'home'],
+  ),
+  Task(tags: ['guy', 'dog']),
 ];
