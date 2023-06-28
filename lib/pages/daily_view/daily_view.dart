@@ -5,25 +5,24 @@ import 'package:flutter/material.dart';
 import './widgets/widgets.dart';
 
 class DailyView extends StatefulWidget {
-  const DailyView({super.key, required this.title});
+  const DailyView({super.key, required this.title, required this.tasks});
 
   final String title;
+  final List<Task> tasks;
 
   @override
   State<DailyView> createState() => _DailyViewState();
 }
 
 class _DailyViewState extends State<DailyView> {
-  List<Task> tasks = [];
-
-  _DailyViewState() {
-    refreshTaskDatabase();
-  }
-
   @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-    double txtScaleFactor = MediaQuery.of(context).textScaleFactor;
+    ColorScheme theme = Theme
+        .of(context)
+        .colorScheme;
+    double txtScaleFactor = MediaQuery
+        .of(context)
+        .textScaleFactor;
 
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +36,9 @@ class _DailyViewState extends State<DailyView> {
         leading: IconButton(
           icon: const Icon(Icons.menu),
           color: theme.onPrimary,
-          onPressed: () {},
+          onPressed: () {
+            setState(() {});
+          },
         ),
         actions: <Widget>[
           IconButton(
@@ -48,14 +49,15 @@ class _DailyViewState extends State<DailyView> {
                   .create(Task(doDay: DateTime.now()))
                   .then((value) {
                 Task newTask = value;
-                tasks.add(newTask);
+                widget.tasks.add(newTask);
 
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => TaskView(
-                              task: newTask,
-                              tasks: tasks,
-                            )))
+                    builder: (context) =>
+                        TaskView(
+                          task: newTask,
+                          tasks: widget.tasks,
+                        )))
                     .then((value) {
                   setState(() {});
                 });
@@ -68,16 +70,17 @@ class _DailyViewState extends State<DailyView> {
         margin: const EdgeInsets.all(20),
         child: ListView.separated(
           separatorBuilder: (context, _) => const SizedBox(height: 15),
-          itemCount: tasks.length,
+          itemCount: widget.tasks.length,
           itemBuilder: (BuildContext context, int index) {
             return ElevatedButton(
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                        builder: (context) => TaskView.edit(
-                              task: tasks[index],
-                              tasks: tasks,
-                            )))
+                    builder: (context) =>
+                        TaskView.edit(
+                          task: widget.tasks[index],
+                          tasks: widget.tasks,
+                        )))
                     .then((value) {
                   setState(() {});
                 });
@@ -99,21 +102,23 @@ class _DailyViewState extends State<DailyView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            task_title(title: tasks[index].title, theme: theme),
-                            if (tasks[index].due != null)
-                              due(date: tasks[index].due!, theme: theme),
+                            task_title(
+                                title: widget.tasks[index].title, theme: theme),
+                            if (widget.tasks[index].due != null)
+                              due(date: widget.tasks[index].due!, theme: theme),
                           ],
                         ),
                       ),
                       Flexible(
                           flex: 2,
                           child: progress_indicator(
-                              progress: tasks[index].progress, theme: theme)),
+                              progress: widget.tasks[index].progress,
+                              theme: theme)),
                     ],
                   ),
-                  if (tasks[index].tags?.isNotEmpty ?? false)
+                  if (widget.tasks[index].tags?.isNotEmpty ?? false)
                     tags_list(
-                        tags: tasks[index].tags!,
+                        tags: widget.tasks[index].tags!,
                         theme: theme,
                         txtScaleFactor: txtScaleFactor),
                 ],
@@ -123,16 +128,6 @@ class _DailyViewState extends State<DailyView> {
         ),
       ),
     );
-  }
-
-  Future<void> refreshTaskDatabase() async {
-    TaskDatabase.instance.readAll().then((list) {
-      tasks = list;
-      print("Done Loading");
-    }).onError((error, stackTrace) {
-      print(error.toString());
-      print(stackTrace.toString());
-    });
   }
 }
 
