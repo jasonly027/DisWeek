@@ -1,10 +1,11 @@
+import 'package:dis_week/utils/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../utils/task.dart';
 
-class checklist extends StatefulWidget {
-  const checklist({
+class Checklist extends StatefulWidget {
+  const Checklist({
     super.key,
     required this.task,
   });
@@ -12,10 +13,10 @@ class checklist extends StatefulWidget {
   final Task task;
 
   @override
-  State<checklist> createState() => _checklistState();
+  State<Checklist> createState() => _ChecklistState();
 }
 
-class _checklistState extends State<checklist> {
+class _ChecklistState extends State<Checklist> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
@@ -38,6 +39,7 @@ class _checklistState extends State<checklist> {
                       tempNewIndex > oldIndex ? tempNewIndex - 1 : tempNewIndex;
                   final item = widget.task.checklist!.removeAt(oldIndex);
                   widget.task.checklist!.insert(newIndex, item);
+                  TaskDatabase.instance.update(widget.task);
                 });
               },
               onReorderStart: (index) => HapticFeedback.lightImpact(),
@@ -53,6 +55,7 @@ class _checklistState extends State<checklist> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     item.isChecked = value!;
+                                    TaskDatabase.instance.update(widget.task);
                                   });
                                 }),
                           ),
@@ -63,6 +66,7 @@ class _checklistState extends State<checklist> {
                               textInputAction: TextInputAction.done,
                               onChanged: (text) {
                                 item.title = text;
+                                TaskDatabase.instance.update(widget.task);
                               },
                               onTapOutside: (context) {
                                 FocusManager.instance.primaryFocus?.unfocus();
@@ -84,6 +88,7 @@ class _checklistState extends State<checklist> {
                                     if (widget.task.checklist!.isEmpty) {
                                       widget.task.checklist = null;
                                     }
+                                    TaskDatabase.instance.update(widget.task);
                                   });
                                 },
                                 icon: const Icon(Icons.close),
@@ -104,6 +109,7 @@ class _checklistState extends State<checklist> {
                   setState(() {
                     widget.task.checklist ??= <Check>[];
                     widget.task.checklist!.add(Check());
+                    TaskDatabase.instance.update(widget.task);
                   });
                 },
                 style: TextButton.styleFrom(

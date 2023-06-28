@@ -1,9 +1,10 @@
+import 'package:dis_week/utils/database.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/task.dart';
 
-class titleField extends StatelessWidget {
-  const titleField({
+class TitleField extends StatelessWidget {
+  const TitleField({
     super.key,
     required this.task,
   });
@@ -29,6 +30,7 @@ class titleField extends StatelessWidget {
       onChanged: (text) {
         task.title = text;
         if (task.title!.isEmpty) task.title = null;
+        TaskDatabase.instance.update(task);
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

@@ -14,10 +14,11 @@ class DisWeek extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DisWeek',
-      // theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      // theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       home: const DailyView(title: 'Today'),
     );
+
   }
 }

@@ -1,19 +1,20 @@
+import 'package:dis_week/utils/database.dart';
 import 'package:dis_week/utils/task.dart';
 import 'package:flutter/material.dart';
 import 'widgets/widgets.dart';
 
 class TaskView extends StatefulWidget {
-  TaskView({Key? key})
+  const TaskView({Key? key, required this.task, required this.tasks})
       : title = "New Task",
-        task = Task(),
         super(key: key);
 
-  const TaskView.edit({Key? key, required this.task})
+  const TaskView.edit({Key? key, required this.task, required this.tasks})
       : title = "Edit Task",
         super(key: key);
 
   final String title;
   final Task task;
+  final List<Task> tasks;
 
   @override
   State<TaskView> createState() => _TaskViewState();
@@ -37,14 +38,18 @@ class _TaskViewState extends State<TaskView> {
             color: theme.onPrimary,
             onPressed: () {
               Navigator.pop(context);
-              print(widget.task.due);
             },
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.save),
+              icon: const Icon(Icons.delete),
               color: theme.onPrimary,
-              onPressed: () {},
+              onPressed: () {
+                widget.tasks.remove(widget.task);
+                TaskDatabase.instance.delete(widget.task.id!).then((value) {
+                  Navigator.pop(context);
+                });
+              },
             )
           ],
         ),
@@ -55,15 +60,15 @@ class _TaskViewState extends State<TaskView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const headerText(text: "Task Name", marginTop: 0),
-                titleField(task: widget.task),
+                TitleField(task: widget.task),
                 const headerText(text: "Tags"),
-                tagsList(tags: widget.task.tags),
+                TagsList(task: widget.task),
                 const headerText(text: "Due"),
-                dueButton(task: widget.task),
+                DueButton(task: widget.task),
                 const headerText(text: "Checklist"),
-                checklist(task: widget.task),
+                Checklist(task: widget.task),
                 const headerText(text: "Description"),
-                descriptionField(task: widget.task),
+                DescriptionField(task: widget.task),
               ],
             ),
           ),

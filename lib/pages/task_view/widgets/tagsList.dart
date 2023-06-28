@@ -1,28 +1,32 @@
+import 'package:dis_week/utils/database.dart';
 import 'package:flutter/material.dart';
 
-class tagsList extends StatefulWidget {
-  const tagsList({
+import '../../../utils/task.dart';
+
+class TagsList extends StatefulWidget {
+  const TagsList({
     super.key,
-    required this.tags,
+    required this.task,
   });
 
-  final List<String>? tags;
+  final Task task;
 
   @override
-  State<tagsList> createState() => _tagsListState();
+  State<TagsList> createState() => _TagsListState();
 }
 
-class _tagsListState extends State<tagsList> {
+class _TagsListState extends State<TagsList> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
 
     return Wrap(children: [
-        ...?widget.tags
+        ...?widget.task.tags
             ?.map((item) => tagButton(
             onPressed: () {
               setState(() {
-                widget.tags?.remove(item);
+                widget.task.tags?.remove(item);
+                TaskDatabase.instance.update(widget.task);
               });
             },
             textColor: theme.onSurface,

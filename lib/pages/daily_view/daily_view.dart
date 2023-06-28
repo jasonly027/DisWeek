@@ -1,4 +1,5 @@
 import 'package:dis_week/pages/task_view/task_view.dart';
+import 'package:dis_week/utils/database.dart';
 import 'package:dis_week/utils/task.dart';
 import 'package:flutter/material.dart';
 import './widgets/widgets.dart';
@@ -13,11 +14,16 @@ class DailyView extends StatefulWidget {
 }
 
 class _DailyViewState extends State<DailyView> {
+  List<Task> tasks = [];
+
+  _DailyViewState() {
+    refreshTaskDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
     double txtScaleFactor = MediaQuery.of(context).textScaleFactor;
-    var tasks = tempList;
 
     return Scaffold(
       appBar: AppBar(
@@ -31,17 +37,29 @@ class _DailyViewState extends State<DailyView> {
         leading: IconButton(
           icon: const Icon(Icons.menu),
           color: theme.onPrimary,
-          onPressed: () {
-            setState(() {});
-          },
+          onPressed: () {},
         ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
             color: theme.onPrimary,
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => TaskView()));
+              TaskDatabase.instance
+                  .create(Task(doDay: DateTime.now()))
+                  .then((value) {
+                Task newTask = value;
+                tasks.add(newTask);
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => TaskView(
+                              task: newTask,
+                              tasks: tasks,
+                            )))
+                    .then((value) {
+                  setState(() {});
+                });
+              });
             },
           )
         ],
@@ -54,11 +72,15 @@ class _DailyViewState extends State<DailyView> {
           itemBuilder: (BuildContext context, int index) {
             return ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            TaskView.edit(task: tasks[index])));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => TaskView.edit(
+                              task: tasks[index],
+                              tasks: tasks,
+                            )))
+                    .then((value) {
+                  setState(() {});
+                });
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
@@ -102,20 +124,27 @@ class _DailyViewState extends State<DailyView> {
       ),
     );
   }
+
+  Future<void> refreshTaskDatabase() async {
+    TaskDatabase.instance.readAll().then((list) {
+      tasks = list;
+      print("Done Loading");
+    }).onError((error, stackTrace) {
+      print(error.toString());
+      print(stackTrace.toString());
+    });
+  }
 }
 
 var tempList = [
   Task(
     title: "Mango",
+    doDay: DateTime.now(),
     due: DateTime(2023, 6, 23, 4, 27),
     tags: [
       'urgent',
       'animal',
       'go home',
-      'djflahsdflaaaaaaaa12312312',
-      'bbbbbbbbbbbbbbb',
-      'casdasdasdasdasdasdas',
-      'd'
     ],
     checklist: [
       Check(title: "Hi Joe", isChecked: true),
@@ -124,8 +153,9 @@ var tempList = [
     description: "Hello",
   ),
   Task(
+    doDay: DateTime.now(),
     due: DateTime.now().toLocal(),
     tags: ['late', 'home'],
   ),
-  Task(tags: ['guy', 'dog']),
+  Task(title: "aloha", doDay: DateTime.now(), tags: ['guy', 'dog']),
 ];

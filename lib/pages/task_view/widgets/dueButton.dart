@@ -1,10 +1,11 @@
+import 'package:dis_week/utils/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../utils/task.dart';
 import 'headerText.dart';
 
-class dueButton extends StatefulWidget {
-  const dueButton({
+class DueButton extends StatefulWidget {
+  const DueButton({
     super.key,
     required this.task,
   });
@@ -12,10 +13,10 @@ class dueButton extends StatefulWidget {
   final Task task;
 
   @override
-  State<dueButton> createState() => _dueButtonState();
+  State<DueButton> createState() => _DueButtonState();
 }
 
-class _dueButtonState extends State<dueButton> {
+class _DueButtonState extends State<DueButton> {
   @override
   Widget build(BuildContext context) {
     String due;
@@ -42,6 +43,7 @@ class _dueButtonState extends State<dueButton> {
 
               setState(() {
                 widget.task.due = tempDateTime;
+                TaskDatabase.instance.update(widget.task);
               });
             },
             style: ElevatedButton.styleFrom(
@@ -58,6 +60,7 @@ class _dueButtonState extends State<dueButton> {
                   onPressed: () {
                     setState(() {
                       widget.task.due = null;
+                      TaskDatabase.instance.update(widget.task);
                     });
                   },
                   icon: const Icon(Icons.close)))
