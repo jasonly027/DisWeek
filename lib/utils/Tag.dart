@@ -5,4 +5,8 @@ class Tag {
   Color color;
 
   Tag({this.name, required this.color});
+
+  bool equals(Tag other) {
+    return name == other.name && color == other.color;
+  }
 }

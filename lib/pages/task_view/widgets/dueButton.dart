@@ -43,7 +43,7 @@ class _DueButtonState extends State<DueButton> {
 
               setState(() {
                 widget.task.due = tempDateTime;
-                TaskDatabase.instance.update(widget.task);
+                // TaskDatabase.instance.update(widget.task);
               });
             },
             style: ElevatedButton.styleFrom(
@@ -65,7 +65,7 @@ class _DueButtonState extends State<DueButton> {
                   onPressed: () {
                     setState(() {
                       widget.task.due = null;
-                      TaskDatabase.instance.update(widget.task);
+                      // TaskDatabase.instance.update(widget.task);
                     });
                   },
                   icon: const Icon(Icons.close)))

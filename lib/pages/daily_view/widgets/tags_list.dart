@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/Tag.dart';
+
 class tags_list extends StatelessWidget {
   const tags_list(
       {super.key,
@@ -7,7 +9,7 @@ class tags_list extends StatelessWidget {
       required this.theme,
       required this.txtScaleFactor});
 
-  final List<String> tags;
+  final List<Tag> tags;
   final ColorScheme theme;
   final double txtScaleFactor;
 
@@ -25,13 +27,16 @@ class tags_list extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(5)),
-              color: theme.inversePrimary,
+              color: tags[tagIndex].color,
             ),
             child: FittedBox(
                 child: Text(
-              tags[tagIndex],
+              tags[tagIndex].name ?? "No Name",
               style: TextStyle(
-                  color: theme.onSurface, fontWeight: FontWeight.bold),
+                  color: tags[tagIndex].color.computeLuminance() > 0.5
+                      ? Colors.black
+                      : Colors.white,
+                  fontWeight: FontWeight.bold),
             )),
           );
         },

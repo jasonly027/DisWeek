@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:dis_week/utils/Tag.dart';
+
 import 'Check.dart';
 
 const String tableTasks = 'tasks';
@@ -32,7 +34,7 @@ class Task {
   String? title;
   DateTime doDay;
   DateTime? due;
-  List<String>? tags;
+  List<Tag>? tags;
   Progress progress;
   List<Check>? checklist;
   String? description;
@@ -52,7 +54,7 @@ class Task {
     String? title,
     DateTime? doDay,
     DateTime? due,
-    List<String>? tags,
+    List<Tag>? tags,
     Progress? progress,
     List<Check>? checklist,
     String? description,
@@ -68,23 +70,23 @@ class Task {
         description: description ?? this.description,
       );
 
-  static Task fromJson(Map<String, Object?> json) => Task(
-      id: json[TaskFields.id] as int?,
-      title: json[TaskFields.title] as String?,
-      doDay: DateTime.parse(json[TaskFields.doDay] as String),
-      due: json[TaskFields.due] != null
-          ? DateTime.parse(json[TaskFields.due] as String)
-          : null,
-      tags: json[TaskFields.tags] != null
-          ? List<String>.from(jsonDecode(json[TaskFields.tags] as String))
-          : null,
-      progress: Progress.values[json[TaskFields.progress] as int],
-      checklist: json[TaskFields.checklist] != null
-          ? (jsonDecode(json[TaskFields.checklist] as String) as List).map((item) {
-              return Check.fromJson(item);
-            }).toList()
-          : null,
-      description: json[TaskFields.description] as String?);
+  // static Task fromJson(Map<String, Object?> json) => Task(
+  //     id: json[TaskFields.id] as int?,
+  //     title: json[TaskFields.title] as String?,
+  //     doDay: DateTime.parse(json[TaskFields.doDay] as String),
+  //     due: json[TaskFields.due] != null
+  //         ? DateTime.parse(json[TaskFields.due] as String)
+  //         : null,
+  //     tags: json[TaskFields.tags] != null
+  //         ? List<String>.from(jsonDecode(json[TaskFields.tags] as String))
+  //         : null,
+  //     progress: Progress.values[json[TaskFields.progress] as int],
+  //     checklist: json[TaskFields.checklist] != null
+  //         ? (jsonDecode(json[TaskFields.checklist] as String) as List).map((item) {
+  //             return Check.fromJson(item);
+  //           }).toList()
+  //         : null,
+  //     description: json[TaskFields.description] as String?);
 
   Map<String, Object?> toJson() => {
         TaskFields.id: id,

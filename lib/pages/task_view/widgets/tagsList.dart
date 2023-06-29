@@ -24,16 +24,16 @@ class _TagsListState extends State<TagsList> {
 
     return Wrap(children: [
       ...?widget.task.tags
-          ?.map((item) => tagButton(
+          ?.map((tag) => tagButton(
               onPressed: () {
                 setState(() {
-                  widget.task.tags?.remove(item);
-                  TaskDatabase.instance.update(widget.task);
+                  widget.task.tags?.remove(tag);
+                  // TaskDatabase.instance.update(widget.task);
                 });
               },
-              textColor: theme.onPrimary,
-              backgroundColor: theme.primary,
-              title: item))
+              textColor: tag.color.computeLuminance() > 0.5 ? Colors.black : Colors.white,
+              backgroundColor: tag.color,
+              title: tag.name))
           .toList(),
       tagButton(
           onPressed: () {
@@ -41,7 +41,7 @@ class _TagsListState extends State<TagsList> {
           },
           textColor: theme.onTertiaryContainer,
           backgroundColor: theme.tertiaryContainer,
-          title: "Add Tag")
+          title: " + ")
     ]);
   }
 }

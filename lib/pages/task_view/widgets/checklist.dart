@@ -40,7 +40,7 @@ class _ChecklistState extends State<Checklist> {
                       tempNewIndex > oldIndex ? tempNewIndex - 1 : tempNewIndex;
                   final item = widget.task.checklist!.removeAt(oldIndex);
                   widget.task.checklist!.insert(newIndex, item);
-                  TaskDatabase.instance.update(widget.task);
+                  // TaskDatabase.instance.update(widget.task);
                 });
               },
               onReorderStart: (index) => HapticFeedback.lightImpact(),
@@ -56,7 +56,7 @@ class _ChecklistState extends State<Checklist> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     item.isChecked = value!;
-                                    TaskDatabase.instance.update(widget.task);
+                                    // TaskDatabase.instance.update(widget.task);
                                   });
                                 }),
                           ),
@@ -67,7 +67,7 @@ class _ChecklistState extends State<Checklist> {
                               textInputAction: TextInputAction.done,
                               onChanged: (text) {
                                 item.title = text;
-                                TaskDatabase.instance.update(widget.task);
+                                // TaskDatabase.instance.update(widget.task);
                               },
                               onTapOutside: (context) {
                                 FocusManager.instance.primaryFocus?.unfocus();
@@ -89,7 +89,7 @@ class _ChecklistState extends State<Checklist> {
                                     if (widget.task.checklist!.isEmpty) {
                                       widget.task.checklist = null;
                                     }
-                                    TaskDatabase.instance.update(widget.task);
+                                    // TaskDatabase.instance.update(widget.task);
                                   });
                                 },
                                 icon: const Icon(Icons.close),
@@ -110,7 +110,7 @@ class _ChecklistState extends State<Checklist> {
                   setState(() {
                     widget.task.checklist ??= <Check>[];
                     widget.task.checklist!.add(Check());
-                    TaskDatabase.instance.update(widget.task);
+                    // TaskDatabase.instance.update(widget.task);
                   });
                 },
                 style: TextButton.styleFrom(

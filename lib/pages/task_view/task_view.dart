@@ -1,6 +1,7 @@
 import 'package:dis_week/utils/Database.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:flutter/material.dart';
+import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
 
 class TaskView extends StatefulWidget {
@@ -32,6 +33,7 @@ class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
+    ValueNotifier<Task> task = ValueNotifier(widget.task);
 
     return Stack(alignment: Alignment.center, children: [
       Scaffold(
@@ -54,10 +56,10 @@ class _TaskViewState extends State<TaskView> {
               icon: const Icon(Icons.delete),
               color: theme.onPrimary,
               onPressed: () {
-                widget.tasks.remove(widget.task);
-                TaskDatabase.instance.delete(widget.task.id!).then((value) {
-                  Navigator.pop(context);
-                });
+                // widget.tasks.remove(widget.task);
+                // TaskDatabase.instance.delete(widget.task.id!).then((value) {
+                //   Navigator.pop(context);
+                // });
               },
             )
           ],
@@ -83,7 +85,20 @@ class _TaskViewState extends State<TaskView> {
           ),
         ),
       ),
-      // if (showTagsMenu) TagsMenu(task: widget.task, toggle: showTagsMenuFunc)
+      if (showTagsMenu)
+        TagsMenu(
+            task: widget.task,
+            tasks: widget.tasks,
+            globalTags: globalTags,
+            toggle: showTagsMenuFunc),
     ]);
   }
 }
+
+List<Tag> globalTags = [
+  Tag(color: Colors.red, name: 'urgent'),
+  Tag(color: Colors.blue, name: 'animal'),
+  Tag(color: Colors.greenAccent, name: 'go home'),
+  Tag(color: Colors.indigoAccent, name: 'michael'),
+  Tag(color: Colors.lightBlueAccent, name: 'inside outside'),
+];

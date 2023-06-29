@@ -1,5 +1,6 @@
 import 'package:dis_week/pages/task_view/task_view.dart';
 import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/Tag.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:dis_week/utils/Check.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,8 @@ class DailyView extends StatefulWidget {
 class _DailyViewState extends State<DailyView> {
   @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme
-        .of(context)
-        .colorScheme;
-    double txtScaleFactor = MediaQuery
-        .of(context)
-        .textScaleFactor;
+    ColorScheme theme = Theme.of(context).colorScheme;
+    double txtScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,23 +43,22 @@ class _DailyViewState extends State<DailyView> {
             icon: const Icon(Icons.add),
             color: theme.onPrimary,
             onPressed: () {
-              TaskDatabase.instance
-                  .create(Task(doDay: DateTime.now()))
-                  .then((value) {
-                Task newTask = value;
-                widget.tasks.add(newTask);
-
-                Navigator.of(context)
-                    .push(MaterialPageRoute(
-                    builder: (context) =>
-                        TaskView(
-                          task: newTask,
-                          tasks: widget.tasks,
-                        )))
-                    .then((value) {
-                  setState(() {});
-                });
-              });
+              // TaskDatabase.instance
+              //     .create(Task(doDay: DateTime.now()))
+              //     .then((value) {
+              //   Task newTask = value;
+              //   widget.tasks.add(newTask);
+              //
+              //   Navigator.of(context)
+              //       .push(MaterialPageRoute(
+              //           builder: (context) => TaskView(
+              //                 task: newTask,
+              //                 tasks: widget.tasks,
+              //               )))
+              //       .then((value) {
+              //     setState(() {});
+              //   });
+              // });
             },
           )
         ],
@@ -77,11 +73,10 @@ class _DailyViewState extends State<DailyView> {
               onPressed: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(
-                    builder: (context) =>
-                        TaskView.edit(
-                          task: widget.tasks[index],
-                          tasks: widget.tasks,
-                        )))
+                        builder: (context) => TaskView.edit(
+                              task: widget.tasks[index],
+                              tasks: widget.tasks,
+                            )))
                     .then((value) {
                   setState(() {});
                 });
@@ -132,26 +127,3 @@ class _DailyViewState extends State<DailyView> {
   }
 }
 
-var tempList = [
-  Task(
-    title: "Mango",
-    doDay: DateTime.now(),
-    due: DateTime(2023, 6, 23, 4, 27),
-    tags: [
-      'urgent',
-      'animal',
-      'go home',
-    ],
-    checklist: [
-      Check(title: "Hi Joe", isChecked: true),
-      Check(title: "Badger")
-    ],
-    description: "Hello",
-  ),
-  Task(
-    doDay: DateTime.now(),
-    due: DateTime.now().toLocal(),
-    tags: ['late', 'home'],
-  ),
-  Task(title: "aloha", doDay: DateTime.now(), tags: ['guy', 'dog']),
-];

@@ -3,11 +3,38 @@ import 'package:dis_week/utils/Database.dart';
 import 'package:flutter/material.dart';
 
 import '../config/color_schemes.g.dart';
+import '../utils/Check.dart';
+import '../utils/Tag.dart';
 import '../utils/Task.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(DisWeek(tasks: TaskDatabase.instance.readAll()));
+
+  // runApp(DisWeek(tasks: TaskDatabase.instance.readAll()));
+
+  List<Task> tempList = [
+    Task(
+      title: "Mango",
+      doDay: DateTime.now(),
+      due: DateTime(2023, 6, 23, 4, 27),
+      tags: [
+        Tag(color: Colors.red, name: 'urgent'),
+        Tag(color: Colors.blue, name: 'animal'),
+        Tag(color: Colors.greenAccent, name: 'go home'),
+      ],
+      checklist: [
+        Check(title: "Hi Joe", isChecked: true),
+        Check(title: "Badger")
+      ],
+      description: "Hello",
+    ),
+    Task(doDay: DateTime.now(), due: DateTime.now().toLocal(), tags: [
+      Tag(color: Colors.indigoAccent, name: 'urgent'),
+      Tag(color: Colors.lightBlueAccent, name: 'urgent'),
+    ]),
+    Task(title: "aloha", doDay: DateTime.now()),
+  ];
+  runApp(DisWeek(tasks: Future<List<Task>>.value(tempList)));
 }
 
 class DisWeek extends StatelessWidget {
