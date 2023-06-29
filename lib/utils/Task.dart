@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'Check.dart';
+
 const String tableTasks = 'tasks';
 
 class TaskFields {
@@ -98,18 +100,3 @@ class Task {
 
 enum Progress { incomplete, complete, checklist }
 
-class Check {
-  String? title;
-  bool isChecked;
-
-  Check({this.title, this.isChecked = false});
-
-  Check.fromJson(Map<String, dynamic> json)
-      : title = json['title'] as String?,
-        isChecked = json['isChecked'] as bool;
-
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'isChecked': isChecked,
-      };
-}

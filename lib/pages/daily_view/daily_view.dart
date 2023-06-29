@@ -1,6 +1,7 @@
 import 'package:dis_week/pages/task_view/task_view.dart';
-import 'package:dis_week/utils/database.dart';
-import 'package:dis_week/utils/task.dart';
+import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/Task.dart';
+import 'package:dis_week/utils/Check.dart';
 import 'package:flutter/material.dart';
 import './widgets/widgets.dart';
 

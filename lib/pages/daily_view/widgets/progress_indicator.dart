@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/task.dart';
+import '../../../utils/Task.dart';
 
 class progress_indicator extends StatelessWidget {
   const progress_indicator({

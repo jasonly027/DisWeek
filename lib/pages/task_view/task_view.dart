@@ -1,5 +1,5 @@
-import 'package:dis_week/utils/database.dart';
-import 'package:dis_week/utils/task.dart';
+import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/Task.dart';
 import 'package:flutter/material.dart';
 import 'widgets/widgets.dart';
 
@@ -21,11 +21,20 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  bool showTagsMenu = false;
+
+  void showTagsMenuFunc(bool value) {
+    setState(() {
+      showTagsMenu = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
 
-    return Scaffold(
+    return Stack(alignment: Alignment.center, children: [
+      Scaffold(
         appBar: AppBar(
           backgroundColor: theme.primary,
           title: Text(
@@ -62,7 +71,7 @@ class _TaskViewState extends State<TaskView> {
                 const headerText(text: "Task Name", marginTop: 0),
                 TitleField(task: widget.task),
                 const headerText(text: "Tags"),
-                TagsList(task: widget.task),
+                TagsList(toggle: showTagsMenuFunc, task: widget.task),
                 const headerText(text: "Due"),
                 DueButton(task: widget.task),
                 const headerText(text: "Checklist"),
@@ -72,6 +81,9 @@ class _TaskViewState extends State<TaskView> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+      // if (showTagsMenu) TagsMenu(task: widget.task, toggle: showTagsMenuFunc)
+    ]);
   }
 }

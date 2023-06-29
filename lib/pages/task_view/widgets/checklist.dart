@@ -1,8 +1,9 @@
-import 'package:dis_week/utils/database.dart';
+import 'package:dis_week/utils/Database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dis_week/utils/Check.dart';
 
-import '../../../utils/task.dart';
+import '../../../utils/Task.dart';
 
 class Checklist extends StatefulWidget {
   const Checklist({

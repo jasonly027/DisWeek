@@ -1,7 +1,7 @@
-import 'package:dis_week/utils/database.dart';
+import 'package:dis_week/utils/Database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../utils/task.dart';
+import '../../../utils/Task.dart';
 import 'headerText.dart';
 
 class DueButton extends StatefulWidget {
@@ -50,7 +50,12 @@ class _DueButtonState extends State<DueButton> {
                 backgroundColor: _containerColor(widget.task.due),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
-            child: FittedBox(child: headerText(text: due, marginTop: 0)),
+            child: FittedBox(
+                child: headerText(
+              text: due,
+              textColor: _textColor(widget.task.due),
+              marginTop: 0,
+            )),
           ),
         ),
         if (widget.task.due != null)
@@ -66,6 +71,16 @@ class _DueButtonState extends State<DueButton> {
                   icon: const Icon(Icons.close)))
       ],
     );
+  }
+
+  Color? _textColor(DateTime? date) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
+    if (date == null ||
+        date.difference(DateTime.now()) > const Duration(days: 1)) {
+      return theme.onPrimaryContainer;
+    }
+    return theme.onErrorContainer;
   }
 
   Color? _containerColor(DateTime? date) {

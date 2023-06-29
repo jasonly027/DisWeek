@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../utils/database.dart';
-import '../../../utils/task.dart';
+import '../../../utils/Database.dart';
+import '../../../utils/Task.dart';
 
 class DescriptionField extends StatelessWidget {
   const DescriptionField({
@@ -17,6 +17,7 @@ class DescriptionField extends StatelessWidget {
     return TextFormField(
       initialValue: task.description,
       maxLines: null,
+      style: TextStyle(fontSize: 17, color: theme.onPrimaryContainer),
       decoration: InputDecoration(
           hintText: 'Add a description',
           filled: true,

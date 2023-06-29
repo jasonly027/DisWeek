@@ -5,12 +5,14 @@ class headerText extends StatelessWidget {
     super.key,
     required this.text,
     this.fontSize = 23,
-    this.marginTop = 12
+    this.marginTop = 12,
+    this.textColor
   });
 
   final String text;
   final double fontSize;
   final double marginTop;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class headerText extends StatelessWidget {
       padding: EdgeInsets.only(top: marginTop),
       child: Text(text,
           style: TextStyle(
-            color: theme.primary,
+            color: textColor ?? theme.primary,
             fontWeight: FontWeight.bold,
             fontSize: fontSize,
           )),
