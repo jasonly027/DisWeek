@@ -69,7 +69,10 @@ class _TagsListState extends State<TagsList> {
           ?.map((tag) => TagButton(
               onPressed: () {
                 setState(() {
-                  widget.task.tags?.remove(tag);
+                  widget.task.tags!.remove(tag);
+                  if (widget.task.tags!.isEmpty) {
+                    widget.task.tags = null;
+                  }
                   TaskDatabase.instance.updateTask(widget.task);
                 });
               },
@@ -279,6 +282,12 @@ class _TagsListState extends State<TagsList> {
                                                                     (tag) => tag
                                                                         .equals(
                                                                             globalTag));
+                                                                if (task.tags
+                                                                        ?.isEmpty ??
+                                                                    false) {
+                                                                  task.tags =
+                                                                      null;
+                                                                }
                                                                 TaskDatabase
                                                                     .instance
                                                                     .updateTask(
@@ -341,7 +350,7 @@ class _TagsListState extends State<TagsList> {
           },
           textColor: theme.onTertiaryContainer,
           backgroundColor: theme.tertiaryContainer,
-          title: " + ")
+          title: "   +   ")
     ]);
   }
 }

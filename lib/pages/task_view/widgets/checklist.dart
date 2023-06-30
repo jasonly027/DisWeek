@@ -56,6 +56,9 @@ class _ChecklistState extends State<Checklist> {
                                 onChanged: (bool? value) {
                                   setState(() {
                                     item.isChecked = value!;
+                                    if (!value) {
+                                      widget.task.isDone = false;
+                                    }
                                     TaskDatabase.instance.updateTask(widget.task);
                                   });
                                 }),
@@ -110,6 +113,7 @@ class _ChecklistState extends State<Checklist> {
                   setState(() {
                     widget.task.checklist ??= <Check>[];
                     widget.task.checklist!.add(Check());
+                    widget.task.isDone = false;
                     TaskDatabase.instance.updateTask(widget.task);
                   });
                 },

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:dis_week/pages/task_view/task_view.dart';
 import 'package:dis_week/utils/Database.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../utils/Tag.dart';
 import './widgets/widgets.dart';
 
@@ -24,20 +28,20 @@ class _DailyViewState extends State<DailyView> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
-    double txtScaleFactor = MediaQuery.of(context).textScaleFactor;
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: theme.primary,
+        backgroundColor: theme.primaryContainer,
         title: Text(
           widget.title,
-          style: TextStyle(color: theme.onPrimary),
+          style: TextStyle(
+              color: theme.onPrimaryContainer, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.menu),
-          color: theme.onPrimary,
+          color: theme.onPrimaryContainer,
           onPressed: () {
             // setState(() {
             //   getApplicationDocumentsDirectory().then((value) {
@@ -48,8 +52,10 @@ class _DailyViewState extends State<DailyView> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.add),
-            color: theme.onPrimary,
+              onPressed: () {},
+              color: theme.onPrimaryContainer,
+              icon: const Icon(Icons.calendar_month)),
+          IconButton(
             onPressed: () {
               TaskDatabase.instance
                   .createTask(Task(doDay: DateTime.now()))
@@ -69,8 +75,14 @@ class _DailyViewState extends State<DailyView> {
                 });
               });
             },
+            icon: const Icon(Icons.add),
+            color: theme.onPrimaryContainer,
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.flip_camera_android),
       ),
       body: Container(
         margin: const EdgeInsets.all(20),
@@ -97,36 +109,33 @@ class _DailyViewState extends State<DailyView> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
               ),
-              child: Column(
+              child: Row(
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 8,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    flex: 7,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TaskTitle(
+                            title: widget.tasks[index].title, theme: theme),
+                        if (widget.tasks[index].due != null)
+                          due(date: widget.tasks[index].due!, theme: theme),
+                        Wrap(
                           children: [
-                            task_title(
-                                title: widget.tasks[index].title, theme: theme),
-                            if (widget.tasks[index].due != null)
-                              due(date: widget.tasks[index].due!, theme: theme),
+                            ...?widget.tasks[index].tags
+                                ?.map((tag) => TagBox(tag: tag))
                           ],
-                        ),
-                      ),
-                      Flexible(
-                          flex: 2,
-                          child: progress_indicator(
-                              progress: widget.tasks[index].progress,
-                              theme: theme)),
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                  if (widget.tasks[index].tags?.isNotEmpty ?? false)
-                    tags_list(
-                        tags: widget.tasks[index].tags!,
-                        theme: theme,
-                        txtScaleFactor: txtScaleFactor),
+                  Expanded(
+                      flex: 3,
+                      child: ProgressIndicatorCustom(
+                        task: widget.tasks[index],
+                        tasks: widget.tasks,
+                        tags: widget.tags,
+                      )),
                 ],
               ),
             );

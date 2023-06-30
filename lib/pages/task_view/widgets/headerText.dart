@@ -25,6 +25,7 @@ class headerText extends StatelessWidget {
             color: textColor ?? theme.primary,
             fontWeight: FontWeight.bold,
             fontSize: fontSize,
+            shadows: const [Shadow(blurRadius: 0.5)],
           )),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class task_title extends StatelessWidget {
+class TaskTitle extends StatelessWidget {
   final String? title;
   final ColorScheme theme;
 
-  const task_title({
+  const TaskTitle({
     super.key,
     required this.title,
     required this.theme,
@@ -23,7 +23,7 @@ class task_title extends StatelessWidget {
           style: TextStyle(
             color: theme.onSurface,
             fontWeight: FontWeight.bold,
-            fontSize: 22,
+            fontSize: 23,
           )),
     );
   }

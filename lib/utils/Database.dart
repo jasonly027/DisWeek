@@ -36,7 +36,7 @@ class TaskDatabase {
           ${TaskFields.doDay} $integerTypeNotNull,
           ${TaskFields.due} $textType,
           ${TaskFields.tags} $textType,
-          ${TaskFields.progress} $integerType,
+          ${TaskFields.isDone} $integerType,
           ${TaskFields.checklist} $textType,
           ${TaskFields.description} $textType
         )

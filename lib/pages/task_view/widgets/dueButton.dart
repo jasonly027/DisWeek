@@ -12,6 +12,11 @@ class DueButton extends StatefulWidget {
 
   final Task task;
 
+  static bool isUrgent(DateTime? dateTime) {
+    if (dateTime == null) return false;
+    return dateTime.difference(DateTime.now()) <= const Duration(days: 1);
+  }
+
   @override
   State<DueButton> createState() => _DueButtonState();
 }
@@ -83,11 +88,10 @@ class _DueButtonState extends State<DueButton> {
     return theme.onErrorContainer;
   }
 
-  Color? _containerColor(DateTime? date) {
+  Color? _containerColor(DateTime? dateTime) {
     ColorScheme theme = Theme.of(context).colorScheme;
 
-    if (date == null ||
-        date.difference(DateTime.now()) > const Duration(days: 1)) {
+    if (dateTime == null || !DueButton.isUrgent(dateTime)) {
       return theme.primaryContainer;
     }
     return theme.errorContainer;

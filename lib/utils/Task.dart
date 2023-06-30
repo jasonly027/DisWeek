@@ -14,7 +14,7 @@ class TaskFields {
     doDay,
     due,
     tags,
-    progress,
+    isDone,
     checklist,
     description
   ];
@@ -24,7 +24,7 @@ class TaskFields {
   static const String doDay = 'doDay';
   static const String due = 'due';
   static const String tags = 'tags';
-  static const String progress = 'progress';
+  static const String isDone = 'isDone';
   static const String checklist = 'checklist';
   static const String description = 'description';
 }
@@ -35,7 +35,7 @@ class Task {
   DateTime doDay;
   DateTime? due;
   List<Tag>? tags;
-  Progress progress;
+  bool isDone;
   List<Check>? checklist;
   String? description;
 
@@ -45,7 +45,7 @@ class Task {
       required this.doDay,
       this.due,
       this.tags,
-      this.progress = Progress.incomplete,
+      this.isDone = false,
       this.checklist,
       this.description});
 
@@ -55,7 +55,7 @@ class Task {
     DateTime? doDay,
     DateTime? due,
     List<Tag>? tags,
-    Progress? progress,
+    bool? isDone,
     List<Check>? checklist,
     String? description,
   }) =>
@@ -65,7 +65,7 @@ class Task {
         doDay: doDay ?? this.doDay,
         due: due ?? this.due,
         tags: tags ?? this.tags,
-        progress: progress ?? this.progress,
+        isDone: isDone ?? this.isDone,
         checklist: checklist ?? this.checklist,
         description: description ?? this.description,
       );
@@ -82,7 +82,7 @@ class Task {
               return Tag.fromJson(item);
             }).toList()
           : null,
-      progress: Progress.values[json[TaskFields.progress] as int],
+      isDone: json[TaskFields.isDone] == 1,
       checklist: json[TaskFields.checklist] != null
           ? (jsonDecode(json[TaskFields.checklist] as String) as List)
               .map((item) {
@@ -97,10 +97,8 @@ class Task {
         TaskFields.doDay: doDay.toIso8601String(),
         TaskFields.due: due?.toIso8601String(),
         TaskFields.tags: tags != null ? jsonEncode(tags) : null,
-        TaskFields.progress: progress.index,
+        TaskFields.isDone: isDone ? 1 : 0,
         TaskFields.checklist: checklist != null ? jsonEncode(checklist) : null,
         TaskFields.description: description,
       };
 }
-
-enum Progress { incomplete, complete, checklist }
