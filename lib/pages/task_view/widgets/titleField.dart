@@ -30,7 +30,7 @@ class TitleField extends StatelessWidget {
       onChanged: (text) {
         task.title = text;
         if (task.title!.isEmpty) task.title = null;
-        // TaskDatabase.instance.update(task);
+        TaskDatabase.instance.updateTask(task);
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

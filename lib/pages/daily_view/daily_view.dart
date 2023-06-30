@@ -1,16 +1,20 @@
 import 'package:dis_week/pages/task_view/task_view.dart';
 import 'package:dis_week/utils/Database.dart';
-import 'package:dis_week/utils/Tag.dart';
 import 'package:dis_week/utils/Task.dart';
-import 'package:dis_week/utils/Check.dart';
 import 'package:flutter/material.dart';
+import '../../utils/Tag.dart';
 import './widgets/widgets.dart';
 
 class DailyView extends StatefulWidget {
-  const DailyView({super.key, required this.title, required this.tasks});
+  const DailyView(
+      {super.key,
+      required this.title,
+      required this.tasks,
+      required this.tags});
 
   final String title;
   final List<Task> tasks;
+  final List<Tag> tags;
 
   @override
   State<DailyView> createState() => _DailyViewState();
@@ -35,7 +39,11 @@ class _DailyViewState extends State<DailyView> {
           icon: const Icon(Icons.menu),
           color: theme.onPrimary,
           onPressed: () {
-            setState(() {});
+            // setState(() {
+            //   getApplicationDocumentsDirectory().then((value) {
+            //     File(join(value.path, 'DisWeekTasks.db')).delete();
+            //   });
+            // });
           },
         ),
         actions: <Widget>[
@@ -43,22 +51,23 @@ class _DailyViewState extends State<DailyView> {
             icon: const Icon(Icons.add),
             color: theme.onPrimary,
             onPressed: () {
-              // TaskDatabase.instance
-              //     .create(Task(doDay: DateTime.now()))
-              //     .then((value) {
-              //   Task newTask = value;
-              //   widget.tasks.add(newTask);
-              //
-              //   Navigator.of(context)
-              //       .push(MaterialPageRoute(
-              //           builder: (context) => TaskView(
-              //                 task: newTask,
-              //                 tasks: widget.tasks,
-              //               )))
-              //       .then((value) {
-              //     setState(() {});
-              //   });
-              // });
+              TaskDatabase.instance
+                  .createTask(Task(doDay: DateTime.now()))
+                  .then((value) {
+                Task newTask = value;
+                widget.tasks.add(newTask);
+
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (context) => TaskView(
+                              task: newTask,
+                              tasks: widget.tasks,
+                              globalTags: widget.tags,
+                            )))
+                    .then((value) {
+                  setState(() {});
+                });
+              });
             },
           )
         ],
@@ -76,6 +85,7 @@ class _DailyViewState extends State<DailyView> {
                         builder: (context) => TaskView.edit(
                               task: widget.tasks[index],
                               tasks: widget.tasks,
+                              globalTags: widget.tags,
                             )))
                     .then((value) {
                   setState(() {});
@@ -126,4 +136,3 @@ class _DailyViewState extends State<DailyView> {
     );
   }
 }
-

@@ -5,35 +5,35 @@ import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({Key? key, required this.task, required this.tasks})
+  const TaskView(
+      {Key? key,
+      required this.task,
+      required this.tasks,
+      required this.globalTags})
       : title = "New Task",
         super(key: key);
 
-  const TaskView.edit({Key? key, required this.task, required this.tasks})
+  const TaskView.edit(
+      {Key? key,
+      required this.task,
+      required this.tasks,
+      required this.globalTags})
       : title = "Edit Task",
         super(key: key);
 
   final String title;
   final Task task;
   final List<Task> tasks;
+  final List<Tag> globalTags;
 
   @override
   State<TaskView> createState() => _TaskViewState();
 }
 
 class _TaskViewState extends State<TaskView> {
-  bool showTagsMenu = false;
-
-  void showTagsMenuFunc(bool value) {
-    setState(() {
-      showTagsMenu = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
-    ValueNotifier<Task> task = ValueNotifier(widget.task);
 
     return Stack(alignment: Alignment.center, children: [
       Scaffold(
@@ -56,10 +56,10 @@ class _TaskViewState extends State<TaskView> {
               icon: const Icon(Icons.delete),
               color: theme.onPrimary,
               onPressed: () {
-                // widget.tasks.remove(widget.task);
-                // TaskDatabase.instance.delete(widget.task.id!).then((value) {
-                //   Navigator.pop(context);
-                // });
+                widget.tasks.remove(widget.task);
+                TaskDatabase.instance.deleteTask(widget.task.id!).then((value) {
+                  Navigator.pop(context);
+                });
               },
             )
           ],
@@ -73,7 +73,10 @@ class _TaskViewState extends State<TaskView> {
                 const headerText(text: "Task Name", marginTop: 0),
                 TitleField(task: widget.task),
                 const headerText(text: "Tags"),
-                TagsList(toggle: showTagsMenuFunc, task: widget.task),
+                TagsList(
+                    task: widget.task,
+                    tasks: widget.tasks,
+                    globalTags: widget.globalTags),
                 const headerText(text: "Due"),
                 DueButton(task: widget.task),
                 const headerText(text: "Checklist"),
@@ -85,20 +88,13 @@ class _TaskViewState extends State<TaskView> {
           ),
         ),
       ),
-      if (showTagsMenu)
-        TagsMenu(
-            task: widget.task,
-            tasks: widget.tasks,
-            globalTags: globalTags,
-            toggle: showTagsMenuFunc),
     ]);
   }
+// List<Tag> globalTags = [
+//   Tag(id: 5, color: Colors.red, name: 'urgent'),
+//   Tag(id: 4, color: Colors.blue, name: 'animal'),
+//   Tag(id: 3, color: Colors.greenAccent, name: 'go home'),
+//   Tag(id: 2, color: Colors.indigoAccent, name: 'michael'),
+//   Tag(id: 1, color: Colors.lightBlueAccent, name: 'inside outside'),
+// ];
 }
-
-List<Tag> globalTags = [
-  Tag(color: Colors.red, name: 'urgent'),
-  Tag(color: Colors.blue, name: 'animal'),
-  Tag(color: Colors.greenAccent, name: 'go home'),
-  Tag(color: Colors.indigoAccent, name: 'michael'),
-  Tag(color: Colors.lightBlueAccent, name: 'inside outside'),
-];

@@ -29,7 +29,7 @@ class DescriptionField extends StatelessWidget {
       onChanged: (text) {
         task.description = text;
         if (task.description!.isEmpty) task.description = null;
-        // TaskDatabase.instance.update(task);
+        TaskDatabase.instance.updateTask(task);
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

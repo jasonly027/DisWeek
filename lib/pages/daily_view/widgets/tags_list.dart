@@ -31,7 +31,7 @@ class tags_list extends StatelessWidget {
             ),
             child: FittedBox(
                 child: Text(
-              tags[tagIndex].name ?? "No Name",
+              tags[tagIndex].name ?? "     ",
               style: TextStyle(
                   color: tags[tagIndex].color.computeLuminance() > 0.5
                       ? Colors.black
