@@ -8,11 +8,12 @@ import '../../task_view/task_view.dart';
 
 class ProgressIndicatorCustom extends StatefulWidget {
   const ProgressIndicatorCustom(
-      {super.key, required this.task, required this.tasks, required this.tags});
+      {super.key, required this.task, required this.tasks, required this.tags, required this.today});
 
   final Task task;
   final List<Task> tasks;
   final List<Tag> tags;
+  final DateTime today;
 
   @override
   State<ProgressIndicatorCustom> createState() =>
@@ -94,6 +95,7 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
                             task: widget.task,
                             tasks: widget.tasks,
                             globalTags: widget.tags,
+                            today: widget.today,
                           )))
                   .then((value) {
                 setState(() {});

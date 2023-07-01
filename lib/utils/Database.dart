@@ -80,9 +80,15 @@ class TaskDatabase {
     final db = await instance.database;
 
     final result = await db.query(tableTasks,
-        orderBy: '${TaskFields.id} ASC',
+        orderBy: """${TaskFields.isDone},
+                    ${TaskFields.due}, 
+                    ${TaskFields.id}""",
         where:
-            "DATE(${TaskFields.doDay}) BETWEEN DATE(?,'start of day') AND DATE(?, 'start of day', '+1 day')",
+            """DATE(${TaskFields.doDay})
+                  BETWEEN 
+                    DATE(?,'start of day')
+                  AND
+                    DATE(?, 'start of day', '+1 day')""",
         whereArgs: [date.toIso8601String(), date.toIso8601String()],
     );
 
@@ -94,7 +100,10 @@ class TaskDatabase {
     final startOfWeek = date.subtract(Duration(days: date.weekday % 7));
 
     final result = await db.query(tableTasks,
-      orderBy: '${TaskFields.id} ASC',
+      orderBy: """${TaskFields.isDone},
+                  ${TaskFields.doDay},
+                  ${TaskFields.due},
+                  ${TaskFields.id}""",
       where: """DATE(${TaskFields.doDay})
                   BETWEEN
                     DATE(?)
@@ -111,7 +120,7 @@ class TaskDatabase {
   Future<List<Task>> readAllTasks() async {
     final db = await instance.database;
 
-    const orderBy = '${TaskFields.doDay} ASC';
+    const orderBy = '${TaskFields.id} ASC';
     final result = await db.query(tableTasks, orderBy: orderBy);
 
     return result.map((json) {

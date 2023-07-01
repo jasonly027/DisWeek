@@ -10,7 +10,8 @@ class TaskView extends StatefulWidget {
       {Key? key,
       required this.task,
       required this.tasks,
-      required this.globalTags})
+      required this.globalTags,
+      required this.today})
       : title = "New Task",
         super(key: key);
 
@@ -18,7 +19,8 @@ class TaskView extends StatefulWidget {
       {Key? key,
       required this.task,
       required this.tasks,
-      required this.globalTags})
+      required this.globalTags,
+      required this.today})
       : title = "Edit Task",
         super(key: key);
 
@@ -26,6 +28,7 @@ class TaskView extends StatefulWidget {
   final Task task;
   final List<Task> tasks;
   final List<Tag> globalTags;
+  final DateTime today;
 
   @override
   State<TaskView> createState() => _TaskViewState();
@@ -78,7 +81,7 @@ class _TaskViewState extends State<TaskView> {
                     task: widget.task,
                     globalTags: widget.globalTags),
                 const headerText(text: "Doing On"),
-                DoDay(task: widget.task),
+                DoDay(task: widget.task, tasks: widget.tasks, today: widget.today),
                 const headerText(text: "Due"),
                 DueButton(task: widget.task),
                 const headerText(text: "Checklist"),
