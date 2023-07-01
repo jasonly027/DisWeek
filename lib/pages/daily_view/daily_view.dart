@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dis_week/pages/task_view/task_view.dart';
 import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/TagHelper.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -14,11 +15,11 @@ class DailyView extends StatefulWidget {
       {super.key,
       required this.title,
       required this.tasks,
-      required this.tags});
+      required this.globalTags});
 
   final String title;
   final List<Task> tasks;
-  final List<Tag> tags;
+  final List<Tag> globalTags;
 
   @override
   State<DailyView> createState() => _DailyViewState();
@@ -43,11 +44,11 @@ class _DailyViewState extends State<DailyView> {
           icon: const Icon(Icons.menu),
           color: theme.onPrimaryContainer,
           onPressed: () {
-            // setState(() {
-            //   getApplicationDocumentsDirectory().then((value) {
-            //     File(join(value.path, 'DisWeekTasks.db')).delete();
-            //   });
-            // });
+            setState(() {
+              // getApplicationDocumentsDirectory().then((value) {
+              //   File(join(value.path, 'DisWeekTasks.db')).delete();
+              // });
+            });
           },
         ),
         actions: <Widget>[
@@ -68,7 +69,7 @@ class _DailyViewState extends State<DailyView> {
                         builder: (context) => TaskView(
                               task: newTask,
                               tasks: widget.tasks,
-                              globalTags: widget.tags,
+                              globalTags: widget.globalTags,
                             )))
                     .then((value) {
                   setState(() {});
@@ -97,7 +98,7 @@ class _DailyViewState extends State<DailyView> {
                         builder: (context) => TaskView.edit(
                               task: widget.tasks[index],
                               tasks: widget.tasks,
-                              globalTags: widget.tags,
+                              globalTags: widget.globalTags,
                             )))
                     .then((value) {
                   setState(() {});
@@ -115,6 +116,7 @@ class _DailyViewState extends State<DailyView> {
                     flex: 7,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TaskTitle(
                             title: widget.tasks[index].title, theme: theme),
@@ -122,8 +124,14 @@ class _DailyViewState extends State<DailyView> {
                           due(date: widget.tasks[index].due!, theme: theme),
                         Wrap(
                           children: [
-                            ...?widget.tasks[index].tags
-                                ?.map((tag) => TagBox(tag: tag))
+                            ...?LocalTag.orderTags(
+                                    task: widget.tasks[index],
+                                    globalTags: widget.globalTags,
+                                    prune: true)
+                                ?.map((tagID) => TagBox(
+                                      tagID: tagID,
+                                      globalTags: widget.globalTags,
+                                    ))
                           ],
                         )
                       ],
@@ -134,7 +142,7 @@ class _DailyViewState extends State<DailyView> {
                       child: ProgressIndicatorCustom(
                         task: widget.tasks[index],
                         tasks: widget.tasks,
-                        tags: widget.tags,
+                        tags: widget.globalTags,
                       )),
                 ],
               ),

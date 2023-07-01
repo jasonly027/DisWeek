@@ -1,15 +1,19 @@
 import 'package:dis_week/utils/Tag.dart';
+import 'package:dis_week/utils/TagHelper.dart';
 import 'package:flutter/material.dart';
 
 class TagBox extends StatelessWidget {
-  const TagBox({Key? key, required this.tag}) : super(key: key);
+  const TagBox({Key? key, required this.tagID, required this.globalTags}) : super(key: key);
 
-  final Tag tag;
+  final int tagID;
+  final List<Tag> globalTags;
 
   @override
   Widget build(BuildContext context) {
+    Tag tag = getGlobalTag(tagID, globalTags);
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 3),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
       decoration: BoxDecoration(
         color: tag.color,

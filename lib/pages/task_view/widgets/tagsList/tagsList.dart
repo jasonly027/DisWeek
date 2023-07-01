@@ -1,23 +1,18 @@
 import 'package:dis_week/pages/task_view/widgets/headerText.dart';
-import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
-import '../../../../utils/Tag.dart';
-import '../../../../utils/Task.dart';
 import 'widgets/tagButton.dart';
 
 class TagsList extends StatefulWidget {
   const TagsList({
     super.key,
     required this.task,
-    required this.tasks,
     required this.globalTags,
   });
 
   final Task task;
-  final List<Task> tasks;
   final List<Tag> globalTags;
   static const List<Color> tagColors = [
     Colors.redAccent,
@@ -42,19 +37,6 @@ class TagsList extends StatefulWidget {
     Colors.white,
   ];
 
-  static void sortTags(
-          {required List<Tag>? unsorted, required List<Tag> sorted}) =>
-      unsorted?.sort((a, b) => sorted
-          .indexWhere((tag) => tag.equals(a))
-          .compareTo(sorted.indexWhere((tag) => tag.equals(b))));
-
-  static void calculateGlobalOrder(List<Tag> tags) {
-    for (int i = 0; i < tags.length; ++i) {
-      tags[i].globalOrder = i;
-      TaskDatabase.instance.updateTag(tags[i]);
-    }
-  }
-
   @override
   State<TagsList> createState() => _TagsListState();
 }
@@ -66,21 +48,17 @@ class _TagsListState extends State<TagsList> {
 
     return Wrap(children: [
       ...?widget.task.tags
-          ?.map((tag) => TagButton(
+          ?.map((tagID) => TagButton(
               onPressed: () {
                 setState(() {
-                  widget.task.tags!.remove(tag);
-                  if (widget.task.tags!.isEmpty) {
-                    widget.task.tags = null;
-                  }
-                  TaskDatabase.instance.updateTask(widget.task);
+                  LocalTag.removeTag(task: widget.task, tagID: tagID);
                 });
               },
-              textColor: tag.color.computeLuminance() > 0.5
+              textColor: getGlobalTag(tagID, widget.globalTags).color.computeLuminance() > 0.5
                   ? Colors.black
                   : Colors.white,
-              backgroundColor: tag.color,
-              title: tag.name))
+              backgroundColor: getGlobalTag(tagID, widget.globalTags).color,
+              title: getGlobalTag(tagID, widget.globalTags).name))
           .toList(),
       TagButton(
           onPressed: () {
@@ -114,17 +92,18 @@ class _TagsListState extends State<TagsList> {
                                                 .removeAt(oldIndex);
                                             widget.globalTags
                                                 .insert(newIndex, tag);
-                                            TagsList.calculateGlobalOrder(
+                                            GlobalTag.calculateGlobalOrder(
                                                 widget.globalTags);
                                           });
                                           setState(() {
-                                            for (var task in widget.tasks) {
-                                              TagsList.sortTags(
-                                                  unsorted: task.tags,
-                                                  sorted: widget.globalTags);
-                                              TaskDatabase.instance
-                                                  .updateTask(task);
-                                            }
+                                            // for (var task in widget.tasks) {
+                                            //   LocalTagHelper.reorderTags(
+                                            //       task: task,
+                                            //       globalTags:
+                                            //           widget.globalTags);
+                                            // }
+                                            // TODO: MOVE REORDER RESPONSIBILITY
+                                            LocalTag.orderTags(task: widget.task, globalTags: widget.globalTags);
                                           });
                                         },
                                         onReorderStart: (index) =>
@@ -136,52 +115,22 @@ class _TagsListState extends State<TagsList> {
                                                     Expanded(
                                                       flex: 2,
                                                       child: Checkbox(
-                                                          value: widget
-                                                                  .task.tags
-                                                                  ?.any((tag) =>
-                                                                      tag.equals(
-                                                                          globalTag)) ??
-                                                              false,
+                                                          value: widget .task.tags ?.contains(globalTag.id) ?? false,
                                                           activeColor:
                                                               theme.primary,
                                                           onChanged:
                                                               (bool? value) {
                                                             setDialogState(() {
                                                               if (value!) {
-                                                                widget.task
-                                                                        .tags ??=
-                                                                    <Tag>[];
-                                                                widget
-                                                                    .task.tags!
-                                                                    .add(
-                                                                        globalTag);
+                                                                LocalTag.addTag(task: widget.task, tagID: globalTag.id!);
                                                               } else {
-                                                                widget
-                                                                    .task.tags!
-                                                                    .removeWhere(
-                                                                        (tag) =>
-                                                                            tag.equals(globalTag));
-                                                                if (widget
-                                                                    .task
-                                                                    .tags!
-                                                                    .isEmpty) {
-                                                                  widget.task
-                                                                          .tags =
-                                                                      null;
-                                                                }
+                                                                LocalTag.removeTag(task: widget.task, tagID: globalTag.id!);
                                                               }
-                                                              TagsList.sortTags(
-                                                                  unsorted:
-                                                                      widget
-                                                                          .task
-                                                                          .tags,
-                                                                  sorted: widget
+                                                              LocalTag.orderTags(
+                                                                  task: widget
+                                                                      .task,
+                                                                  globalTags: widget
                                                                       .globalTags);
-                                                              TaskDatabase
-                                                                  .instance
-                                                                  .updateTask(
-                                                                      widget
-                                                                          .task);
                                                             });
                                                             setState(() {});
                                                           }),
@@ -195,10 +144,9 @@ class _TagsListState extends State<TagsList> {
                                                             TextInputAction
                                                                 .done,
                                                         onChanged: (text) {
-                                                          globalTag.name = text;
-                                                          TaskDatabase.instance
-                                                              .updateTag(
-                                                                  globalTag);
+                                                          setState(() {
+                                                            GlobalTag.renameTag(globalTag: globalTag, name: text);
+                                                          });
                                                         },
                                                         onTapOutside:
                                                             (context) {
@@ -234,14 +182,9 @@ class _TagsListState extends State<TagsList> {
                                                                             'Pick a Color'),
                                                                         content:
                                                                             SingleChildScrollView(
-                                                                                child: BlockPicker(
-                                                                          pickerColor:
-                                                                              globalTag.color,
-                                                                          onColorChanged: (newColor) =>
+                                                                                child: BlockPicker( pickerColor: globalTag.color, onColorChanged: (newColor) =>
                                                                               setDialogState(() {
-                                                                            globalTag.color =
-                                                                                newColor;
-                                                                            TaskDatabase.instance.updateTag(globalTag);
+                                                                            GlobalTag.recolorTag(globalTag: globalTag, color: newColor);
                                                                           }),
                                                                           availableColors:
                                                                               TagsList.tagColors,
@@ -275,32 +218,16 @@ class _TagsListState extends State<TagsList> {
                                                         child: IconButton(
                                                           onPressed: () {
                                                             setDialogState(() {
-                                                              for (Task task
-                                                                  in widget
-                                                                      .tasks) {
-                                                                task.tags?.removeWhere(
-                                                                    (tag) => tag
-                                                                        .equals(
-                                                                            globalTag));
-                                                                if (task.tags
-                                                                        ?.isEmpty ??
-                                                                    false) {
-                                                                  task.tags =
-                                                                      null;
-                                                                }
-                                                                TaskDatabase
-                                                                    .instance
-                                                                    .updateTask(
-                                                                        task);
-                                                              }
-                                                              TaskDatabase
-                                                                  .instance
-                                                                  .deleteTag(
-                                                                      globalTag
-                                                                          .id!);
-                                                              widget.globalTags
-                                                                  .remove(
-                                                                      globalTag);
+                                                              // for (Task task in widget .tasks) {
+                                                              //   task.tags?.removeWhere( (tag) => tag .equals( globalTag));
+                                                              //   if (task.tags ?.isEmpty ?? false) {
+                                                              //     task.tags = null;
+                                                              //   }
+                                                              //   TaskDatabase .instance .updateTask( task);
+                                                              // }
+                                                              // TODO: Move pruning responsibility
+                                                              LocalTag.removeTag(task: widget.task, tagID: globalTag.id!);
+                                                              GlobalTag.removeTag(globalTag: globalTag, globalTags: widget.globalTags);
                                                               setState(() {});
                                                             });
                                                           },
@@ -317,7 +244,7 @@ class _TagsListState extends State<TagsList> {
                                     child: TextButton(
                                         onPressed: () {
                                           TaskDatabase.instance
-                                              .createTag(Tag(
+                                              .createGlobalTag(Tag(
                                                   color: Colors.white,
                                                   globalOrder: widget
                                                           .globalTags.isNotEmpty

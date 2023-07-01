@@ -34,7 +34,7 @@ class Task {
   String? title;
   DateTime doDay;
   DateTime? due;
-  List<Tag>? tags;
+  List<int>? tags;
   bool isDone;
   List<Check>? checklist;
   String? description;
@@ -42,19 +42,20 @@ class Task {
   Task(
       {this.id,
       this.title,
-      required this.doDay,
+      required DateTime doDay,
       this.due,
       this.tags,
       this.isDone = false,
       this.checklist,
-      this.description});
+      this.description})
+      : doDay = DateTime(doDay.year, doDay.month, doDay.day);
 
   Task copy({
     int? id,
     String? title,
     DateTime? doDay,
     DateTime? due,
-    List<Tag>? tags,
+    List<int>? tags,
     bool? isDone,
     List<Check>? checklist,
     String? description,
@@ -78,16 +79,15 @@ class Task {
           ? DateTime.parse(json[TaskFields.due] as String)
           : null,
       tags: json[TaskFields.tags] != null
-          ? (jsonDecode(json[TaskFields.tags] as String) as List).map((item) {
-              return Tag.fromJson(item);
-            }).toList()
+          ? (jsonDecode(json[TaskFields.tags] as String) as List)
+              .map((item) => item as int)
+              .toList()
           : null,
       isDone: json[TaskFields.isDone] == 1,
       checklist: json[TaskFields.checklist] != null
           ? (jsonDecode(json[TaskFields.checklist] as String) as List)
-              .map((item) {
-              return Check.fromJson(item);
-            }).toList()
+              .map((item) => Check.fromJson(item))
+              .toList()
           : null,
       description: json[TaskFields.description] as String?);
 

@@ -50,7 +50,6 @@ class TaskDatabase {
         ${TagFields.globalOrder} $integerType
       )
     """);
-
   }
 
   Future<Task> createTask(Task task) async {
@@ -76,6 +75,38 @@ class TaskDatabase {
       throw Exception('ID $id not found');
     }
   }
+
+  Future<List<Task>> readTasksOnDayOf(DateTime date) async {
+    final db = await instance.database;
+
+    final result = await db.query(tableTasks,
+        orderBy: '${TaskFields.id} ASC',
+        where:
+            "DATE(${TaskFields.doDay}) BETWEEN DATE(?,'start of day') AND DATE(?, 'start of day', '+1 day')",
+        whereArgs: [date.toIso8601String(), date.toIso8601String()],
+    );
+
+    return result.map((json) => Task.fromJson(json)).toList();
+  }
+
+  Future<List<Task>> readTasksWithinWeekOf(DateTime date) async {
+    final db = await instance.database;
+    final startOfWeek = date.subtract(Duration(days: date.weekday % 7));
+
+    final result = await db.query(tableTasks,
+      orderBy: '${TaskFields.id} ASC',
+      where: """DATE(${TaskFields.doDay})
+                  BETWEEN
+                    DATE(?)
+                  AND
+                    DATE(?, '+6 days')""",
+      whereArgs: [startOfWeek.toIso8601String(), startOfWeek.toIso8601String()],
+    );
+
+    return result.map((json) => Task.fromJson(json)).toList();
+  }
+
+
 
   Future<List<Task>> readAllTasks() async {
     final db = await instance.database;
@@ -106,14 +137,14 @@ class TaskDatabase {
         .delete(tableTasks, where: '${TaskFields.id} = ?', whereArgs: [id]);
   }
 
-  Future<Tag> createTag(Tag tag) async {
+  Future<Tag> createGlobalTag(Tag tag) async {
     final db = await instance.database;
 
     final id = await db.insert(tableTags, tag.toJson());
     return tag.copy(id: id);
   }
 
-  Future<Tag> readTag(int id) async {
+  Future<Tag> readGlobalTag(int id) async {
     final db = await instance.database;
 
     final map = await db.query(tableTags,
@@ -128,7 +159,7 @@ class TaskDatabase {
     }
   }
 
-  Future<List<Tag>> readAllTags() async {
+  Future<List<Tag>> readAllGlobalTags() async {
     final db = await instance.database;
 
     const orderBy = '${TagFields.globalOrder} ASC';
@@ -137,14 +168,14 @@ class TaskDatabase {
     return result.map((json) => Tag.fromJson(json)).toList();
   }
 
-  Future<int> updateTag(Tag tag) async {
+  Future<int> updateGlobalTag(Tag tag) async {
     final db = await instance.database;
 
     return db.update(tableTags, tag.toJson(),
         where: '${TagFields.id} = ?', whereArgs: [tag.id]);
   }
 
-  Future<int> deleteTag(int id) async {
+  Future<int> deleteGlobalTag(int id) async {
     final db = await instance.database;
 
     return await db

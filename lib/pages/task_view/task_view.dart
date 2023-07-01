@@ -1,3 +1,4 @@
+import 'package:dis_week/pages/daily_view/widgets/doDay.dart';
 import 'package:dis_week/utils/Database.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +76,9 @@ class _TaskViewState extends State<TaskView> {
                 const headerText(text: "Tags"),
                 TagsList(
                     task: widget.task,
-                    tasks: widget.tasks,
                     globalTags: widget.globalTags),
+                const headerText(text: "Doing On"),
+                DoDay(task: widget.task),
                 const headerText(text: "Due"),
                 DueButton(task: widget.task),
                 const headerText(text: "Checklist"),

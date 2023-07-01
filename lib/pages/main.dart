@@ -5,8 +5,14 @@ import '../config/color_schemes.g.dart';
 
 Future<List<List<dynamic>>> fromDB() async {
   List<List<dynamic>> fromDB = [
-    await TaskDatabase.instance.readAllTasks(),
-    await TaskDatabase.instance.readAllTags(),
+    // await TaskDatabase.instance.readAllTasks(),
+    await TaskDatabase.instance.readTasksWithinWeekOf(DateTime.now())
+      .onError((error, stackTrace) {
+        print(error);
+        print(stackTrace);
+        return [];
+    }),
+    await TaskDatabase.instance.readAllGlobalTags(),
   ];
   return fromDB;
 }
@@ -61,13 +67,13 @@ class DisWeek extends StatelessWidget {
               return DailyView(
                 title: 'Today',
                 tasks: snapshot.data[0],
-                tags: snapshot.data[1],
+                globalTags: snapshot.data[1],
               );
             } else {
               return const DailyView(
-                title: 'Today',
+                title: 'Loading...',
                 tasks: [],
-                tags: [],
+                globalTags: [],
               );
             }
           },
