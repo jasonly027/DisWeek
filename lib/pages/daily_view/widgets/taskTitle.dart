@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class TaskTitle extends StatelessWidget {
   final String? title;
-  final ColorScheme theme;
 
   const TaskTitle({
     super.key,
     required this.title,
-    required this.theme,
   });
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),

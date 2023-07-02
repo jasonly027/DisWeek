@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-class headerText extends StatelessWidget {
-  const headerText({
-    super.key,
-    required this.text,
-    this.fontSize = 23,
-    this.marginTop = 12,
-    this.textColor
-  });
+class Header extends StatelessWidget {
+  const Header(this.text,
+      {super.key, this.fontSize = 23, this.marginTop = 12, this.textColor});
 
   final String text;
   final double fontSize;

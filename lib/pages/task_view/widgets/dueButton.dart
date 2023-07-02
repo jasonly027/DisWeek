@@ -1,8 +1,8 @@
-import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../utils/Task.dart';
-import 'headerText.dart';
+import 'header.dart';
 
 class DueButton extends StatefulWidget {
   const DueButton({
@@ -12,11 +12,6 @@ class DueButton extends StatefulWidget {
 
   final Task task;
 
-  static bool isUrgent(DateTime? dateTime) {
-    if (dateTime == null) return false;
-    return dateTime.difference(DateTime.now()) <= const Duration(days: 1);
-  }
-
   @override
   State<DueButton> createState() => _DueButtonState();
 }
@@ -24,6 +19,8 @@ class DueButton extends StatefulWidget {
 class _DueButtonState extends State<DueButton> {
   @override
   Widget build(BuildContext context) {
+    ColorScheme theme = Theme.of(context).colorScheme;
+
     String due;
     if (widget.task.due == null) {
       due = "Add a Due Date";
@@ -48,17 +45,21 @@ class _DueButtonState extends State<DueButton> {
 
               setState(() {
                 widget.task.due = tempDateTime;
-                TaskDatabase.instance.updateTask(widget.task);
+                TaskOperations.updateTask(widget.task);
               });
             },
             style: ElevatedButton.styleFrom(
-                backgroundColor: _containerColor(widget.task.due),
+                backgroundColor: Task.isUrgent(widget.task)
+                    ? theme.primaryContainer
+                    : theme.errorContainer,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
             child: FittedBox(
-                child: headerText(
-              text: due,
-              textColor: _textColor(widget.task.due),
+                child: Header(
+              due,
+              textColor: Task.isUrgent(widget.task)
+                  ? theme.onErrorContainer
+                  : theme.onPrimaryContainer,
               marginTop: 0,
             )),
           ),
@@ -70,31 +71,12 @@ class _DueButtonState extends State<DueButton> {
                   onPressed: () {
                     setState(() {
                       widget.task.due = null;
-                      TaskDatabase.instance.updateTask(widget.task);
+                      TaskOperations.updateTask(widget.task);
                     });
                   },
                   icon: const Icon(Icons.close)))
       ],
     );
-  }
-
-  Color? _textColor(DateTime? date) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-
-    if (date == null ||
-        date.difference(DateTime.now()) > const Duration(days: 1)) {
-      return theme.onPrimaryContainer;
-    }
-    return theme.onErrorContainer;
-  }
-
-  Color? _containerColor(DateTime? dateTime) {
-    ColorScheme theme = Theme.of(context).colorScheme;
-
-    if (dateTime == null || !DueButton.isUrgent(dateTime)) {
-      return theme.primaryContainer;
-    }
-    return theme.errorContainer;
   }
 
   Future<DateTime?> _pickDate(DateTime? date) => showDatePicker(

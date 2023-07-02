@@ -1,6 +1,6 @@
 import 'package:dis_week/pages/daily_view/widgets/doDay.dart';
-import 'package:dis_week/utils/Database.dart';
 import 'package:dis_week/utils/Task.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
@@ -61,7 +61,7 @@ class _TaskViewState extends State<TaskView> {
               color: theme.onPrimary,
               onPressed: () {
                 widget.tasks.remove(widget.task);
-                TaskDatabase.instance.deleteTask(widget.task.id!).then((value) {
+                TaskOperations.deleteTask(widget.task.id!).then((value) {
                   Navigator.pop(context);
                 });
               },
@@ -74,19 +74,20 @@ class _TaskViewState extends State<TaskView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const headerText(text: "Task Name", marginTop: 0),
+                const Header("Task Name", marginTop: 0),
                 TitleField(task: widget.task),
-                const headerText(text: "Tags"),
-                TagsList(
+                const Header("Tags"),
+                TagsList(task: widget.task, globalTags: widget.globalTags),
+                const Header("Doing On"),
+                DoDay(
                     task: widget.task,
-                    globalTags: widget.globalTags),
-                const headerText(text: "Doing On"),
-                DoDay(task: widget.task, tasks: widget.tasks, today: widget.today),
-                const headerText(text: "Due"),
+                    tasks: widget.tasks,
+                    today: widget.today),
+                const Header("Due"),
                 DueButton(task: widget.task),
-                const headerText(text: "Checklist"),
+                const Header("Checklist"),
                 Checklist(task: widget.task),
-                const headerText(text: "Description"),
+                const Header("Description"),
                 DescriptionField(task: widget.task),
               ],
             ),

@@ -1,5 +1,5 @@
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/Database.dart';
 import '../../../utils/Task.dart';
 
 class DescriptionField extends StatelessWidget {
@@ -29,7 +29,7 @@ class DescriptionField extends StatelessWidget {
       onChanged: (text) {
         task.description = text;
         if (task.description!.isEmpty) task.description = null;
-        TaskDatabase.instance.updateTask(task);
+        TaskOperations.updateTask(task);
       },
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();

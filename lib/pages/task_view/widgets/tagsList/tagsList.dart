@@ -1,4 +1,5 @@
-import 'package:dis_week/pages/task_view/widgets/headerText.dart';
+import 'package:dis_week/pages/task_view/widgets/header.dart';
+import 'package:dis_week/utils/database/tagOperations.dart';
 import 'package:dis_week/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,7 +55,10 @@ class _TagsListState extends State<TagsList> {
                   LocalTag.removeTag(task: widget.task, tagID: tagID);
                 });
               },
-              textColor: getGlobalTag(tagID, widget.globalTags).color.computeLuminance() > 0.5
+              textColor: getGlobalTag(tagID, widget.globalTags)
+                          .color
+                          .computeLuminance() >
+                      0.5
                   ? Colors.black
                   : Colors.white,
               backgroundColor: getGlobalTag(tagID, widget.globalTags).color,
@@ -72,8 +76,7 @@ class _TagsListState extends State<TagsList> {
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const headerText(
-                                      text: 'Edit Tags', marginTop: 5),
+                                  const Header('Edit Tags', marginTop: 5),
                                   SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.3,
@@ -81,6 +84,7 @@ class _TagsListState extends State<TagsList> {
                                         0.80,
                                     child: Scrollbar(
                                       thumbVisibility: true,
+                                      trackVisibility: true,
                                       child: ReorderableListView(
                                         onReorder: (oldIndex, tempNewIndex) {
                                           setDialogState(() {
@@ -103,7 +107,9 @@ class _TagsListState extends State<TagsList> {
                                             //           widget.globalTags);
                                             // }
                                             // TODO: MOVE REORDER RESPONSIBILITY
-                                            LocalTag.orderTags(task: widget.task, globalTags: widget.globalTags);
+                                            LocalTag.orderTags(
+                                                task: widget.task,
+                                                globalTags: widget.globalTags);
                                           });
                                         },
                                         onReorderStart: (index) =>
@@ -115,16 +121,31 @@ class _TagsListState extends State<TagsList> {
                                                     Expanded(
                                                       flex: 2,
                                                       child: Checkbox(
-                                                          value: widget .task.tags ?.contains(globalTag.id) ?? false,
+                                                          value: widget
+                                                                  .task.tags
+                                                                  ?.contains(
+                                                                      globalTag
+                                                                          .id) ??
+                                                              false,
                                                           activeColor:
                                                               theme.primary,
                                                           onChanged:
                                                               (bool? value) {
                                                             setDialogState(() {
                                                               if (value!) {
-                                                                LocalTag.addTag(task: widget.task, tagID: globalTag.id!);
+                                                                LocalTag.addTag(
+                                                                    task: widget
+                                                                        .task,
+                                                                    tagID:
+                                                                        globalTag
+                                                                            .id!);
                                                               } else {
-                                                                LocalTag.removeTag(task: widget.task, tagID: globalTag.id!);
+                                                                LocalTag.removeTag(
+                                                                    task: widget
+                                                                        .task,
+                                                                    tagID:
+                                                                        globalTag
+                                                                            .id!);
                                                               }
                                                               LocalTag.orderTags(
                                                                   task: widget
@@ -145,7 +166,10 @@ class _TagsListState extends State<TagsList> {
                                                                 .done,
                                                         onChanged: (text) {
                                                           setState(() {
-                                                            GlobalTag.renameTag(globalTag: globalTag, name: text);
+                                                            GlobalTag.renameTag(
+                                                                globalTag:
+                                                                    globalTag,
+                                                                name: text);
                                                           });
                                                         },
                                                         onTapOutside:
@@ -182,9 +206,14 @@ class _TagsListState extends State<TagsList> {
                                                                             'Pick a Color'),
                                                                         content:
                                                                             SingleChildScrollView(
-                                                                                child: BlockPicker( pickerColor: globalTag.color, onColorChanged: (newColor) =>
+                                                                                child: BlockPicker(
+                                                                          pickerColor:
+                                                                              globalTag.color,
+                                                                          onColorChanged: (newColor) =>
                                                                               setDialogState(() {
-                                                                            GlobalTag.recolorTag(globalTag: globalTag, color: newColor);
+                                                                            GlobalTag.recolorTag(
+                                                                                globalTag: globalTag,
+                                                                                color: newColor);
                                                                           }),
                                                                           availableColors:
                                                                               TagsList.tagColors,
@@ -226,8 +255,17 @@ class _TagsListState extends State<TagsList> {
                                                               //   TaskDatabase .instance .updateTask( task);
                                                               // }
                                                               // TODO: Move pruning responsibility
-                                                              LocalTag.removeTag(task: widget.task, tagID: globalTag.id!);
-                                                              GlobalTag.removeTag(globalTag: globalTag, globalTags: widget.globalTags);
+                                                              LocalTag.removeTag(
+                                                                  task: widget
+                                                                      .task,
+                                                                  tagID:
+                                                                      globalTag
+                                                                          .id!);
+                                                              GlobalTag.removeTag(
+                                                                  globalTag:
+                                                                      globalTag,
+                                                                  globalTags: widget
+                                                                      .globalTags);
                                                               setState(() {});
                                                             });
                                                           },
@@ -243,8 +281,7 @@ class _TagsListState extends State<TagsList> {
                                   SizedBox(
                                     child: TextButton(
                                         onPressed: () {
-                                          TaskDatabase.instance
-                                              .createGlobalTag(Tag(
+                                          TagOperations.createGlobalTag(Tag(
                                                   color: Colors.white,
                                                   globalOrder: widget
                                                           .globalTags.isNotEmpty

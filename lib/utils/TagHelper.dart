@@ -1,5 +1,5 @@
+import 'package:dis_week/utils/database/tagOperations.dart';
 import 'package:flutter/material.dart';
-
 import 'utils.dart';
 
 Tag getGlobalTag(int id, List<Tag> globalTags) {
@@ -16,7 +16,7 @@ class LocalTag {
     if (prune ?? false) {
       removeNonGlobalTags(task: task, globalTags: globalTags);
     } else {
-      TaskDatabase.instance.updateTask(task);
+      TaskOperations.updateTask(task);
     }
     return task.tags;
   }
@@ -24,13 +24,13 @@ class LocalTag {
   static void addTag({required Task task, required int tagID}) {
     task.tags ??= <int>[];
     task.tags!.add(tagID);
-    TaskDatabase.instance.updateTask(task);
+    TaskOperations.updateTask(task);
   }
 
   static void removeTag({required Task task, required int tagID}) {
     task.tags?.remove(tagID);
     if (task.tags?.isEmpty ?? false) task.tags = null;
-    TaskDatabase.instance.updateTask(task);
+    TaskOperations.updateTask(task);
   }
 
   static void removeNonGlobalTags(
@@ -41,7 +41,7 @@ class LocalTag {
       }
       return false;
     });
-    TaskDatabase.instance.updateTask(task);
+    TaskOperations.updateTask(task);
   }
 }
 
@@ -49,23 +49,23 @@ class GlobalTag {
   static void calculateGlobalOrder(List<Tag> globalTags) {
     for (int i = 0; i < globalTags.length; ++i) {
       globalTags[i].globalOrder = i;
-      TaskDatabase.instance.updateGlobalTag(globalTags[i]);
+      TagOperations.updateGlobalTag(globalTags[i]);
     }
   }
 
   static void removeTag(
       {required Tag globalTag, required List<Tag> globalTags}) {
     globalTags.remove(globalTag);
-    TaskDatabase.instance.deleteGlobalTag(globalTag.id!);
+    TagOperations.deleteGlobalTag(globalTag.id!);
   }
 
   static void renameTag({required Tag globalTag, required String name}) {
     globalTag.name = name;
-    TaskDatabase.instance.updateGlobalTag(globalTag);
+    TagOperations.updateGlobalTag(globalTag);
   }
 
   static void recolorTag({required Tag globalTag, required Color color}) {
     globalTag.color = color;
-    TaskDatabase.instance.updateGlobalTag(globalTag);
+    TagOperations.updateGlobalTag(globalTag);
   }
 }

@@ -2,7 +2,7 @@ import 'package:dis_week/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../task_view/widgets/headerText.dart';
+import '../../task_view/widgets/header.dart';
 
 class DoDay extends StatefulWidget {
   const DoDay(
@@ -20,9 +20,7 @@ class DoDay extends StatefulWidget {
 class _DoDayState extends State<DoDay> {
   @override
   Widget build(BuildContext context) {
-    ColorScheme theme = Theme
-        .of(context)
-        .colorScheme;
+    ColorScheme theme = Theme.of(context).colorScheme;
     String doDay = DateFormat("MMMM d").format(widget.task.doDay);
 
     return SizedBox(
@@ -34,11 +32,10 @@ class _DoDayState extends State<DoDay> {
 
           setState(() {
             widget.task.doDay = tempDate;
-            TaskDatabase.instance.updateTask(widget.task);
+            TaskOperations.updateTask(widget.task);
             if (!widget.task.doDay.isAtSameMomentAs(widget.today)) {
               widget.tasks.remove(widget.task);
-            }
-            else if (!widget.tasks.contains(widget.task)) {
+            } else if (!widget.tasks.contains(widget.task)) {
               widget.tasks.add(widget.task);
             }
           });
@@ -48,19 +45,18 @@ class _DoDayState extends State<DoDay> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
         child: FittedBox(
-            child: headerText(
-              text: doDay,
-              textColor: theme.onPrimaryContainer,
-              marginTop: 0,
-            )),
+            child: Header(
+          doDay,
+          textColor: theme.onPrimaryContainer,
+          marginTop: 0,
+        )),
       ),
     );
   }
 
-  Future<DateTime?> _pickDate(DateTime? date) =>
-      showDatePicker(
-          context: context,
-          initialDate: date ?? DateTime.now(),
-          firstDate: DateTime(1970),
-          lastDate: DateTime.now().add(const Duration(days: 365 * 100)));
+  Future<DateTime?> _pickDate(DateTime? date) => showDatePicker(
+      context: context,
+      initialDate: date ?? DateTime.now(),
+      firstDate: DateTime(1970),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 100)));
 }

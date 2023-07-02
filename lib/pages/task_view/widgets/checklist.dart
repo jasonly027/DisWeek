@@ -1,4 +1,4 @@
-import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dis_week/utils/Check.dart';
@@ -32,6 +32,7 @@ class _ChecklistState extends State<Checklist> {
           if (widget.task.checklist?.isNotEmpty ?? false)
             ReorderableListView(
               shrinkWrap: true,
+              // TODO: Refactor shrinkWrap
               physics: const NeverScrollableScrollPhysics(),
               buildDefaultDragHandles: true,
               onReorder: (oldIndex, tempNewIndex) {
@@ -40,7 +41,7 @@ class _ChecklistState extends State<Checklist> {
                       tempNewIndex > oldIndex ? tempNewIndex - 1 : tempNewIndex;
                   final item = widget.task.checklist!.removeAt(oldIndex);
                   widget.task.checklist!.insert(newIndex, item);
-                  TaskDatabase.instance.updateTask(widget.task);
+                  TaskOperations.updateTask(widget.task);
                 });
               },
               onReorderStart: (index) => HapticFeedback.lightImpact(),
@@ -59,7 +60,7 @@ class _ChecklistState extends State<Checklist> {
                                     if (!value) {
                                       widget.task.isDone = false;
                                     }
-                                    TaskDatabase.instance.updateTask(widget.task);
+                                    TaskOperations.updateTask(widget.task);
                                   });
                                 }),
                           ),
@@ -70,7 +71,7 @@ class _ChecklistState extends State<Checklist> {
                               textInputAction: TextInputAction.done,
                               onChanged: (text) {
                                 item.title = text;
-                                TaskDatabase.instance.updateTask(widget.task);
+                                TaskOperations.updateTask(widget.task);
                               },
                               onTapOutside: (context) {
                                 FocusManager.instance.primaryFocus?.unfocus();
@@ -92,7 +93,7 @@ class _ChecklistState extends State<Checklist> {
                                     if (widget.task.checklist!.isEmpty) {
                                       widget.task.checklist = null;
                                     }
-                                    TaskDatabase.instance.updateTask(widget.task);
+                                    TaskOperations.updateTask(widget.task);
                                   });
                                 },
                                 icon: const Icon(Icons.close),
@@ -114,7 +115,7 @@ class _ChecklistState extends State<Checklist> {
                     widget.task.checklist ??= <Check>[];
                     widget.task.checklist!.add(Check());
                     widget.task.isDone = false;
-                    TaskDatabase.instance.updateTask(widget.task);
+                    TaskOperations.updateTask(widget.task);
                   });
                 },
                 style: TextButton.styleFrom(

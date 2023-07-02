@@ -1,5 +1,4 @@
-import 'package:dis_week/pages/task_view/widgets/dueButton.dart';
-import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/Check.dart';
 import '../../../utils/Tag.dart';
@@ -41,7 +40,7 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
           onPressed: () {
             setState(() {
               widget.task.isDone = false;
-              TaskDatabase.instance.updateTask(widget.task);
+              TaskOperations.updateTask(widget.task);
             });
           },
           style: ElevatedButton.styleFrom(
@@ -59,13 +58,13 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
             onPressed: () {
               setState(() {
                 widget.task.isDone = true;
-                TaskDatabase.instance.updateTask(widget.task);
+                TaskOperations.updateTask(widget.task);
               });
             },
             style: ElevatedButton.styleFrom(
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(23),
-                backgroundColor: DueButton.isUrgent(widget.task.due)
+                backgroundColor: Task.isUrgent(widget.task)
                     ? Theme.of(context).brightness == Brightness.light
                         ? theme.error
                         : theme.errorContainer
@@ -73,7 +72,7 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
             child: Icon(
               Icons.close,
               size: 40,
-              color: DueButton.isUrgent(widget.task.due)
+              color: Task.isUrgent(widget.task)
                 ? Theme.of(context).brightness == Brightness.light
                     ? theme.onError
                     : theme.onErrorContainer
@@ -86,7 +85,7 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
                 widget.task.checklist!.length) {
               setState(() {
                 widget.task.isDone = true;
-                TaskDatabase.instance.updateTask(widget.task);
+                TaskOperations.updateTask(widget.task);
               });
             } else {
               Navigator.of(context)

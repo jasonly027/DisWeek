@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:dis_week/pages/task_view/task_view.dart';
-import 'package:dis_week/utils/Database.dart';
+import 'package:dis_week/utils/database/Database.dart';
 import 'package:dis_week/utils/TagHelper.dart';
 import 'package:dis_week/utils/Task.dart';
+import 'package:dis_week/utils/database/tagOperations.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -13,22 +15,28 @@ import '../week_view/week_view.dart';
 import './widgets/widgets.dart';
 
 class DailyView extends StatefulWidget {
-  const DailyView({super.key, required this.globalTags, required this.today});
+  const DailyView({super.key, required this.today, bool? pushToWeekView,
+          this.todayStats})
+      : pushToWeekView = pushToWeekView ?? false;
 
-  final List<Tag> globalTags;
   final DateTime today;
+  final bool pushToWeekView;
+  final ({String? title, DateTime? due, bool isDone})? todayStats;
 
   @override
   State<DailyView> createState() => _DailyViewState();
 }
 
 class _DailyViewState extends State<DailyView> {
-  late Future<List<Task>> tasks;
+  late Future<List<List>> dataFromDB;
 
   @override
   void initState() {
     super.initState();
-    tasks = TaskDatabase.instance.readTasksOnDayOf(widget.today);
+    dataFromDB = TaskDatabase.multiRead([
+      TaskOperations.readTasksOnDayOf(widget.today),
+      TagOperations.readAllGlobalTags()
+    ]);
   }
 
   @override
@@ -37,7 +45,7 @@ class _DailyViewState extends State<DailyView> {
     final String todayStr = DateFormat.MMMd().format(widget.today);
 
     return FutureBuilder(
-        future: tasks,
+        future: dataFromDB,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState != ConnectionState.done ||
               !snapshot.hasData) {
@@ -63,10 +71,15 @@ class _DailyViewState extends State<DailyView> {
                 },
                 child: const Icon(Icons.flip_camera_android),
               ),
-              body: Text('Loading'),
+              body: Center(
+                  child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                strokeWidth: 5,
+              )),
             );
           } else {
-            List<Task> tasks = snapshot.data;
+            List<Task> tasks = snapshot.data[0];
+            List<Tag> globalTags = snapshot.data[1];
 
             return Scaffold(
               appBar: AppBar(
@@ -97,8 +110,7 @@ class _DailyViewState extends State<DailyView> {
                       icon: const Icon(Icons.calendar_month)),
                   IconButton(
                     onPressed: () {
-                      TaskDatabase.instance
-                          .createTask(Task(doDay: DateTime.now()))
+                      TaskOperations.createTask(Task(doDay: widget.today))
                           .then((value) {
                         Task newTask = value;
                         tasks.add(newTask);
@@ -108,7 +120,7 @@ class _DailyViewState extends State<DailyView> {
                                 builder: (context) => TaskView(
                                       task: newTask,
                                       tasks: tasks,
-                                      globalTags: widget.globalTags,
+                                      globalTags: globalTags,
                                       today: widget.today,
                                     )))
                             .then((value) {
@@ -123,73 +135,84 @@ class _DailyViewState extends State<DailyView> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => WeekView(today: widget.today)));
+                  if (widget.pushToWeekView) {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (context) =>
+                                WeekView(today: widget.today)))
+                        .then((value) {
+                      setState(() {});
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
                 child: const Icon(Icons.flip_camera_android),
               ),
               body: Container(
                 margin: const EdgeInsets.all(20),
-                child: ListView.separated(
-                  separatorBuilder: (context, _) => const SizedBox(height: 15),
+                child: ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(
-                                builder: (context) => TaskView.edit(
-                                      task: tasks[index],
-                                      tasks: tasks,
-                                      globalTags: widget.globalTags,
-                                      today: widget.today,
-                                    )))
-                            .then((value) {
-                          setState(() {});
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        backgroundColor: theme.surfaceVariant,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 7,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TaskTitle(
-                                    title: tasks[index].title, theme: theme),
-                                if (tasks[index].due != null)
-                                  due(date: tasks[index].due!, theme: theme),
-                                Wrap(
-                                  children: [
-                                    ...?LocalTag.orderTags(
-                                            task: tasks[index],
-                                            globalTags: widget.globalTags,
-                                            prune: true)
-                                        ?.map((tagID) => TagBox(
-                                              tagID: tagID,
-                                              globalTags: widget.globalTags,
-                                            ))
-                                  ],
-                                )
-                              ],
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => TaskView.edit(
+                                        task: tasks[index],
+                                        tasks: tasks,
+                                        globalTags: globalTags,
+                                        today: widget.today,
+                                      )))
+                              .then((value) {
+                            setState(() {});
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(10),
+                          backgroundColor: theme.surfaceVariant,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TaskTitle(title: tasks[index].title),
+                                  if (tasks[index].due != null)
+                                    due(task: tasks[index]),
+                                  Wrap(
+                                    children: [
+                                      ...?LocalTag.orderTags(
+                                              task: tasks[index],
+                                              globalTags: globalTags,
+                                              prune: true)
+                                          ?.map((tagID) => TagBox(
+                                                tagID: tagID,
+                                                globalTags: globalTags,
+                                              ))
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              flex: 3,
-                              child: ProgressIndicatorCustom(
-                                task: tasks[index],
-                                tasks: tasks,
-                                tags: widget.globalTags,
-                                today: widget.today,
-                              )),
-                        ],
+                            Expanded(
+                                flex: 3,
+                                child: ProgressIndicatorCustom(
+                                  task: tasks[index],
+                                  tasks: tasks,
+                                  tags: globalTags,
+                                  today: widget.today,
+                                )),
+                          ],
+                        ),
                       ),
                     );
                   },

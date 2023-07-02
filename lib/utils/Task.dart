@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:dis_week/utils/Tag.dart';
-
 import 'Check.dart';
 
 const String tableTasks = 'tasks';
@@ -101,4 +99,18 @@ class Task {
         TaskFields.checklist: checklist != null ? jsonEncode(checklist) : null,
         TaskFields.description: description,
       };
+
+  static bool isUrgent(Task task) {
+    if (task.isDone || task.due == null) return false;
+    return task.due!.difference(DateTime.now()) <= const Duration(days: 1);
+  }
+
+  static ({String? title, DateTime? due}) titleDuePairFromJson(
+          Map<String, Object?> json) =>
+      (
+        title: json[TaskFields.title] as String?,
+        due: json[TaskFields.due] != null
+            ? DateTime.parse(json[TaskFields.due] as String)
+            : null
+      );
 }
