@@ -1,22 +1,17 @@
 import 'dart:io';
-
 import 'package:dis_week/pages/task_view/task_view.dart';
-import 'package:dis_week/utils/database/Database.dart';
-import 'package:dis_week/utils/TagHelper.dart';
-import 'package:dis_week/utils/Task.dart';
+import 'package:dis_week/utils/utils.dart';
 import 'package:dis_week/utils/database/tagOperations.dart';
-import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../utils/Tag.dart';
 import '../week_view/week_view.dart';
 import './widgets/widgets.dart';
 
 class DailyView extends StatefulWidget {
-  const DailyView({super.key, required this.today, bool? pushToWeekView,
-          this.todayStats})
+  const DailyView(
+      {super.key, required this.today, bool? pushToWeekView, this.todayStats})
       : pushToWeekView = pushToWeekView ?? false;
 
   final DateTime today;
@@ -62,20 +57,6 @@ class _DailyViewState extends State<DailyView> {
                   },
                 ),
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => WeekView(
-                            today: widget.today,
-                          )));
-                },
-                child: const Icon(Icons.flip_camera_android),
-              ),
-              body: Center(
-                  child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                strokeWidth: 5,
-              )),
             );
           } else {
             List<Task> tasks = snapshot.data[0];
@@ -117,7 +98,7 @@ class _DailyViewState extends State<DailyView> {
 
                         Navigator.of(context)
                             .push(MaterialPageRoute(
-                                builder: (context) => TaskView(
+                                builder: (context) => TaskView.create(
                                       task: newTask,
                                       tasks: tasks,
                                       globalTags: globalTags,
@@ -138,10 +119,15 @@ class _DailyViewState extends State<DailyView> {
                   if (widget.pushToWeekView) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) =>
-                                WeekView(today: widget.today)))
+                            builder: (context) => WeekView(
+                                today: widget.today, globalTags: globalTags)))
                         .then((value) {
-                      setState(() {});
+                      setState(() {
+                        dataFromDB = TaskDatabase.multiRead([
+                          TaskOperations.readTasksOnDayOf(widget.today),
+                          TagOperations.readAllGlobalTags()
+                        ]);
+                      });
                     });
                   } else {
                     Navigator.pop(context);
@@ -152,6 +138,7 @@ class _DailyViewState extends State<DailyView> {
               body: Container(
                 margin: const EdgeInsets.all(20),
                 child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   itemCount: tasks.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
@@ -187,7 +174,7 @@ class _DailyViewState extends State<DailyView> {
                                 children: [
                                   TaskTitle(title: tasks[index].title),
                                   if (tasks[index].due != null)
-                                    due(task: tasks[index]),
+                                    Due(task: tasks[index]),
                                   Wrap(
                                     children: [
                                       ...?LocalTag.orderTags(

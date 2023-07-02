@@ -2,7 +2,6 @@ import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dis_week/utils/Check.dart';
-
 import '../../../utils/Task.dart';
 
 class Checklist extends StatefulWidget {
@@ -32,7 +31,6 @@ class _ChecklistState extends State<Checklist> {
           if (widget.task.checklist?.isNotEmpty ?? false)
             ReorderableListView(
               shrinkWrap: true,
-              // TODO: Refactor shrinkWrap
               physics: const NeverScrollableScrollPhysics(),
               buildDefaultDragHandles: true,
               onReorder: (oldIndex, tempNewIndex) {

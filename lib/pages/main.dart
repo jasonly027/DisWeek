@@ -16,8 +16,8 @@ class DisWeek extends StatelessWidget {
 
     return MaterialApp(
         title: 'DisWeek',
-        theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-        // theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+        // theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+        theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
         darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
         home: DailyView(today: today, pushToWeekView: true,));
   }

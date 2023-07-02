@@ -50,8 +50,8 @@ class _DueButtonState extends State<DueButton> {
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: Task.isUrgent(widget.task)
-                    ? theme.primaryContainer
-                    : theme.errorContainer,
+                    ? theme.errorContainer
+                    : theme.primaryContainer,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10))),
             child: FittedBox(

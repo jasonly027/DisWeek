@@ -105,12 +105,19 @@ class Task {
     return task.due!.difference(DateTime.now()) <= const Duration(days: 1);
   }
 
-  static ({String? title, DateTime? due}) titleDuePairFromJson(
-          Map<String, Object?> json) =>
-      (
-        title: json[TaskFields.title] as String?,
-        due: json[TaskFields.due] != null
-            ? DateTime.parse(json[TaskFields.due] as String)
-            : null
-      );
+  static ({String? title, bool isUrgent}) titleAndIsUrgentFromJson(
+      Map<String, Object?> json) {
+    String? title = json[TaskFields.title] as String?;
+    DateTime? due = json[TaskFields.due] != null
+                    ? DateTime.parse(json[TaskFields.due] as String)
+                    : null;
+    bool isDone = json[TaskFields.isDone] == 1;
+    bool isUrgent;
+    if (isDone || due == null) {
+      isUrgent = false;
+    } else {
+      isUrgent = due.difference(DateTime.now()) <= const Duration(days: 1);
+    }
+    return (title: title, isUrgent: isUrgent);
+  }
 }

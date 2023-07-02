@@ -10,7 +10,7 @@ class DoDay extends StatefulWidget {
       : super(key: key);
 
   final Task task;
-  final List<Task> tasks;
+  final List<Task>? tasks;
   final DateTime today;
 
   @override
@@ -34,9 +34,9 @@ class _DoDayState extends State<DoDay> {
             widget.task.doDay = tempDate;
             TaskOperations.updateTask(widget.task);
             if (!widget.task.doDay.isAtSameMomentAs(widget.today)) {
-              widget.tasks.remove(widget.task);
-            } else if (!widget.tasks.contains(widget.task)) {
-              widget.tasks.add(widget.task);
+              widget.tasks?.remove(widget.task);
+            } else if (!(widget.tasks?.contains(widget.task) ?? false)) {
+              widget.tasks?.add(widget.task);
             }
           });
         },

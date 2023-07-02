@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../utils/Task.dart';
 
-class due extends StatelessWidget {
-  const due({
+class Due extends StatelessWidget {
+  const Due({
     super.key,
     required this.task,
   });

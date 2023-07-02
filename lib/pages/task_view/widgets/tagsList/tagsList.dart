@@ -1,5 +1,4 @@
 import 'package:dis_week/pages/task_view/widgets/header.dart';
-import 'package:dis_week/utils/database/tagOperations.dart';
 import 'package:dis_week/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,6 +85,7 @@ class _TagsListState extends State<TagsList> {
                                       thumbVisibility: true,
                                       trackVisibility: true,
                                       child: ReorderableListView(
+                                        physics: const BouncingScrollPhysics(),
                                         onReorder: (oldIndex, tempNewIndex) {
                                           setDialogState(() {
                                             final newIndex =

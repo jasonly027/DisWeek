@@ -43,14 +43,15 @@ class TaskOperations {
     return result.map((json) => Task.fromJson(json)).toList();
   }
 
-  static Future<List<({String? title, DateTime? due})>> readTaskTitlesAndDuesOnDayOf(DateTime date) async {
+  static Future<List<({String? title, bool isUrgent})>> readTaskTitlesAndIsUrgent(DateTime date) async {
     final db = await TaskDatabase.instance.database;
 
     final result = await db.query(
       tableTasks,
       columns: [
         TaskFields.title,
-        TaskFields.due
+        TaskFields.due,
+        TaskFields.isDone
       ],
       orderBy: """${TaskFields.isDone},
                     ${TaskFields.due}, 
@@ -62,7 +63,7 @@ class TaskOperations {
       whereArgs: [date.toIso8601String()],
     );
 
-    return result.map((json) => Task.titleDuePairFromJson(json)).toList();
+    return result.map((json) => Task.titleAndIsUrgentFromJson(json)).toList();
   }
 
   static Future<List<Task>> readTasksWithinWeekOf(DateTime date) async {

@@ -1,6 +1,5 @@
-import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:dis_week/utils/database/taskOperations.dart';
 import '../../../utils/Task.dart';
 
 class TitleField extends StatelessWidget {

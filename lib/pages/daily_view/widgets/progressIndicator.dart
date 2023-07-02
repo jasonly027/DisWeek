@@ -1,9 +1,6 @@
-import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/Check.dart';
-import '../../../utils/Tag.dart';
-import '../../../utils/Task.dart';
 import '../../task_view/task_view.dart';
+import 'package:dis_week/utils/utils.dart';
 
 class ProgressIndicatorCustom extends StatefulWidget {
   const ProgressIndicatorCustom(

@@ -6,7 +6,7 @@ import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView(
+  const TaskView.create(
       {Key? key,
       required this.task,
       required this.tasks,
@@ -26,7 +26,7 @@ class TaskView extends StatefulWidget {
 
   final String title;
   final Task task;
-  final List<Task> tasks;
+  final List<Task>? tasks;
   final List<Tag> globalTags;
   final DateTime today;
 
@@ -60,7 +60,7 @@ class _TaskViewState extends State<TaskView> {
               icon: const Icon(Icons.delete),
               color: theme.onPrimary,
               onPressed: () {
-                widget.tasks.remove(widget.task);
+                widget.tasks?.remove(widget.task);
                 TaskOperations.deleteTask(widget.task.id!).then((value) {
                   Navigator.pop(context);
                 });
@@ -96,11 +96,4 @@ class _TaskViewState extends State<TaskView> {
       ),
     ]);
   }
-// List<Tag> globalTags = [
-//   Tag(id: 5, color: Colors.red, name: 'urgent'),
-//   Tag(id: 4, color: Colors.blue, name: 'animal'),
-//   Tag(id: 3, color: Colors.greenAccent, name: 'go home'),
-//   Tag(id: 2, color: Colors.indigoAccent, name: 'michael'),
-//   Tag(id: 1, color: Colors.lightBlueAccent, name: 'inside outside'),
-// ];
 }
