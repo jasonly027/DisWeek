@@ -30,7 +30,7 @@ class _AddState extends State<Add> {
               Task newTask = generatedTask;
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                      builder: (context) => TaskView.create(
+                      builder: (context) => TaskViewScreen.create(
                             task: newTask,
                             tasks: null,
                             globalTags: widget.globalTags,

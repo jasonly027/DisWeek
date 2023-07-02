@@ -100,13 +100,6 @@ class _TagsListState extends State<TagsList> {
                                                 widget.globalTags);
                                           });
                                           setState(() {
-                                            // for (var task in widget.tasks) {
-                                            //   LocalTagHelper.reorderTags(
-                                            //       task: task,
-                                            //       globalTags:
-                                            //           widget.globalTags);
-                                            // }
-                                            // TODO: MOVE REORDER RESPONSIBILITY
                                             LocalTag.orderTags(
                                                 task: widget.task,
                                                 globalTags: widget.globalTags);
@@ -247,14 +240,6 @@ class _TagsListState extends State<TagsList> {
                                                         child: IconButton(
                                                           onPressed: () {
                                                             setDialogState(() {
-                                                              // for (Task task in widget .tasks) {
-                                                              //   task.tags?.removeWhere( (tag) => tag .equals( globalTag));
-                                                              //   if (task.tags ?.isEmpty ?? false) {
-                                                              //     task.tags = null;
-                                                              //   }
-                                                              //   TaskDatabase .instance .updateTask( task);
-                                                              // }
-                                                              // TODO: Move pruning responsibility
                                                               LocalTag.removeTag(
                                                                   task: widget
                                                                       .task,

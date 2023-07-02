@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../utils/weekPickerDialog.dart';
 import '../week_view/week_view.dart';
 import './widgets/widgets.dart';
 
-class DailyView extends StatefulWidget {
-  const DailyView(
+class DailyViewScreen extends StatefulWidget {
+  const DailyViewScreen(
       {super.key, required this.today, bool? pushToWeekView, this.todayStats})
       : pushToWeekView = pushToWeekView ?? false;
 
@@ -19,10 +20,10 @@ class DailyView extends StatefulWidget {
   final ({String? title, DateTime? due, bool isDone})? todayStats;
 
   @override
-  State<DailyView> createState() => _DailyViewState();
+  State<DailyViewScreen> createState() => _DailyViewScreenState();
 }
 
-class _DailyViewState extends State<DailyView> {
+class _DailyViewScreenState extends State<DailyViewScreen> {
   late Future<List<List>> dataFromDB;
 
   @override
@@ -86,7 +87,12 @@ class _DailyViewState extends State<DailyView> {
                 ),
                 actions: <Widget>[
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        weekPickerDialog(
+                            context: context,
+                            today: widget.today,
+                            globalTags: globalTags);
+                      },
                       color: theme.onPrimaryContainer,
                       icon: const Icon(Icons.calendar_month)),
                   IconButton(
@@ -98,7 +104,7 @@ class _DailyViewState extends State<DailyView> {
 
                         Navigator.of(context)
                             .push(MaterialPageRoute(
-                                builder: (context) => TaskView.create(
+                                builder: (context) => TaskViewScreen.create(
                                       task: newTask,
                                       tasks: tasks,
                                       globalTags: globalTags,
@@ -119,7 +125,7 @@ class _DailyViewState extends State<DailyView> {
                   if (widget.pushToWeekView) {
                     Navigator.of(context)
                         .push(MaterialPageRoute(
-                            builder: (context) => WeekView(
+                            builder: (context) => WeekViewScreen(
                                 today: widget.today, globalTags: globalTags)))
                         .then((value) {
                       setState(() {
@@ -135,8 +141,8 @@ class _DailyViewState extends State<DailyView> {
                 },
                 child: const Icon(Icons.flip_camera_android),
               ),
-              body: Container(
-                margin: const EdgeInsets.all(20),
+              body: Padding(
+                padding: const EdgeInsets.all(20),
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   itemCount: tasks.length,
@@ -147,7 +153,7 @@ class _DailyViewState extends State<DailyView> {
                         onPressed: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(
-                                  builder: (context) => TaskView.edit(
+                                  builder: (context) => TaskViewScreen.edit(
                                         task: tasks[index],
                                         tasks: tasks,
                                         globalTags: globalTags,

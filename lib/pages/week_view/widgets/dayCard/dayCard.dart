@@ -32,7 +32,7 @@ class _DayCardState extends State<DayCard> {
           Navigator.of(context)
               .push(MaterialPageRoute(
                   builder: (context) =>
-                      DailyView(today: widget.currentDateTime)))
+                      DailyViewScreen(today: widget.currentDateTime)))
               .then((value) {
             setState(() {
               Scrollable.ensureVisible(context, alignment: 0.5);
@@ -59,7 +59,7 @@ class _DayCardState extends State<DayCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Header(WeekView.weekDays[widget.currentDay]),
+                  Header(WeekViewScreen.weekDays[widget.currentDay]),
                   Add(
                     currentDateTime: widget.currentDateTime,
                     globalTags: widget.globalTags,

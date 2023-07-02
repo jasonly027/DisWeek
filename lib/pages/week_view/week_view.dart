@@ -1,13 +1,11 @@
-import 'package:dis_week/pages/daily_view/daily_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dis_week/utils/weekPickerDialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_date_pickers/flutter_date_pickers.dart';
 import 'package:intl/intl.dart';
 import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
 
-class WeekView extends StatefulWidget {
-  WeekView({Key? key, required this.today, required this.globalTags})
+class WeekViewScreen extends StatefulWidget {
+  WeekViewScreen({Key? key, required this.today, required this.globalTags})
       : startOfWeek = today.subtract(Duration(days: today.weekday % 7)),
         endOfWeek = today
             .subtract(Duration(days: today.weekday % 7))
@@ -30,10 +28,10 @@ class WeekView extends StatefulWidget {
   ];
 
   @override
-  State<WeekView> createState() => _WeekViewState();
+  State<WeekViewScreen> createState() => _WeekViewScreenState();
 }
 
-class _WeekViewState extends State<WeekView> {
+class _WeekViewScreenState extends State<WeekViewScreen> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
@@ -58,10 +56,10 @@ class _WeekViewState extends State<WeekView> {
         actions: <Widget>[
           IconButton(
               onPressed: () {
-                // Navigator.of(context).push(MaterialPageRoute(
-                //   builder: (context) =>
-                // ));
-                //
+                weekPickerDialog(
+                    context: context,
+                    today: widget.today,
+                    globalTags: widget.globalTags);
               },
               color: theme.onPrimaryContainer,
               icon: const Icon(Icons.calendar_month)),
@@ -71,7 +69,7 @@ class _WeekViewState extends State<WeekView> {
         margin: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: WeekView.weekDays.length,
+          itemCount: WeekViewScreen.weekDays.length,
           itemBuilder: (context, currentDay) {
             DateTime currentDateTime =
                 widget.startOfWeek.add(Duration(days: currentDay));

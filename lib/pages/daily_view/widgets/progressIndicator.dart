@@ -87,7 +87,7 @@ class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
             } else {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                      builder: (context) => TaskView.edit(
+                      builder: (context) => TaskViewScreen.edit(
                             task: widget.task,
                             tasks: widget.tasks,
                             globalTags: widget.tags,

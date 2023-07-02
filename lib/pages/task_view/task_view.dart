@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../../utils/Tag.dart';
 import 'widgets/widgets.dart';
 
-class TaskView extends StatefulWidget {
-  const TaskView.create(
+class TaskViewScreen extends StatefulWidget {
+  const TaskViewScreen.create(
       {Key? key,
       required this.task,
       required this.tasks,
@@ -15,7 +15,7 @@ class TaskView extends StatefulWidget {
       : title = "New Task",
         super(key: key);
 
-  const TaskView.edit(
+  const TaskViewScreen.edit(
       {Key? key,
       required this.task,
       required this.tasks,
@@ -31,10 +31,10 @@ class TaskView extends StatefulWidget {
   final DateTime today;
 
   @override
-  State<TaskView> createState() => _TaskViewState();
+  State<TaskViewScreen> createState() => _TaskViewScreenState();
 }
 
-class _TaskViewState extends State<TaskView> {
+class _TaskViewScreenState extends State<TaskViewScreen> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;
