@@ -1,4 +1,4 @@
-export 'add.dart';
-export 'date.dart';
+export 'addButton.dart';
+export 'dateText.dart';
 export 'header.dart';
 export 'TaskTitleList.dart';

@@ -19,11 +19,11 @@ class Due extends StatelessWidget {
       margin: const EdgeInsets.all(2),
       child: Text("Due $monthDay",
           style: TextStyle(
-            color: Task.isUrgent(task) ? theme.error : theme.onPrimaryContainer,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-            shadows: const[Shadow(blurRadius: 1)]
-          )),
+              color:
+                  Task.isUrgent(task) ? theme.error : theme.onPrimaryContainer,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              shadows: const [Shadow(blurRadius: 1)])),
     );
   }
 }

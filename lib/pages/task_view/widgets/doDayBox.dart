@@ -1,11 +1,11 @@
-import 'package:dis_week/utils/utils.dart';
+import 'package:dis_week/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../task_view/widgets/header.dart';
+import 'header.dart';
 
-class DoDay extends StatefulWidget {
-  const DoDay(
+class DoDayButton extends StatefulWidget {
+  const DoDayButton(
       {Key? key, required this.task, required this.tasks, required this.today})
       : super(key: key);
 
@@ -14,10 +14,10 @@ class DoDay extends StatefulWidget {
   final DateTime today;
 
   @override
-  State<DoDay> createState() => _DoDayState();
+  State<DoDayButton> createState() => _DoDayButtonState();
 }
 
-class _DoDayState extends State<DoDay> {
+class _DoDayButtonState extends State<DoDayButton> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;

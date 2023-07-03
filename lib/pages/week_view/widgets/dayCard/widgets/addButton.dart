@@ -1,11 +1,14 @@
 import 'package:dis_week/pages/task_view/task_view.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../utils/utils.dart';
+import '../../../../../utils/Utils.dart';
 
-class Add extends StatefulWidget {
-  const Add({Key? key, required this.currentDateTime, required this.globalTags,
-  required this.rebuildDayCard})
+class AddButton extends StatefulWidget {
+  const AddButton(
+      {Key? key,
+      required this.currentDateTime,
+      required this.globalTags,
+      required this.rebuildDayCard})
       : super(key: key);
 
   final DateTime currentDateTime;
@@ -13,10 +16,10 @@ class Add extends StatefulWidget {
   final void Function() rebuildDayCard;
 
   @override
-  State<Add> createState() => _AddState();
+  State<AddButton> createState() => _AddButtonState();
 }
 
-class _AddState extends State<Add> {
+class _AddButtonState extends State<AddButton> {
   @override
   Widget build(BuildContext context) {
     ColorScheme theme = Theme.of(context).colorScheme;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../task_view/task_view.dart';
-import 'package:dis_week/utils/utils.dart';
+import 'package:dis_week/utils/Utils.dart';
 
-class ProgressIndicatorCustom extends StatefulWidget {
-  const ProgressIndicatorCustom(
+class ProgressButton extends StatefulWidget {
+  const ProgressButton(
       {super.key, required this.task, required this.tasks, required this.tags, required this.today});
 
   final Task task;
@@ -12,11 +12,11 @@ class ProgressIndicatorCustom extends StatefulWidget {
   final DateTime today;
 
   @override
-  State<ProgressIndicatorCustom> createState() =>
-      _ProgressIndicatorCustomState();
+  State<ProgressButton> createState() =>
+      _ProgressButtonState();
 }
 
-class _ProgressIndicatorCustomState extends State<ProgressIndicatorCustom> {
+class _ProgressButtonState extends State<ProgressButton> {
   int calculateCompleted(List<Check> checklist) {
     int count = 0;
     for (Check check in checklist) {

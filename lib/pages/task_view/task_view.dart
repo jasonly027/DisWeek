@@ -1,4 +1,4 @@
-import 'package:dis_week/pages/daily_view/widgets/doDay.dart';
+import 'package:dis_week/pages/task_view/widgets/doDayBox.dart';
 import 'package:dis_week/utils/Task.dart';
 import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
@@ -42,15 +42,16 @@ class _TaskViewScreenState extends State<TaskViewScreen> {
     return Stack(alignment: Alignment.center, children: [
       Scaffold(
         appBar: AppBar(
-          backgroundColor: theme.primary,
+          backgroundColor: theme.primaryContainer,
           title: Text(
             widget.title,
-            style: TextStyle(color: theme.onPrimary),
+            style: TextStyle(
+                color: theme.onPrimaryContainer, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           leading: IconButton(
             icon: const BackButtonIcon(),
-            color: theme.onPrimary,
+            color: theme.onPrimaryContainer,
             onPressed: () {
               Navigator.pop(context);
             },
@@ -58,7 +59,7 @@ class _TaskViewScreenState extends State<TaskViewScreen> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.delete),
-              color: theme.onPrimary,
+              color: theme.onPrimaryContainer,
               onPressed: () {
                 widget.tasks?.remove(widget.task);
                 TaskOperations.deleteTask(widget.task.id!).then((value) {
@@ -73,13 +74,13 @@ class _TaskViewScreenState extends State<TaskViewScreen> {
             margin: const EdgeInsets.all(18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 const Header("Task Name", marginTop: 0),
                 TitleField(task: widget.task),
                 const Header("Tags"),
                 TagsList(task: widget.task, globalTags: widget.globalTags),
                 const Header("Doing On"),
-                DoDay(
+                DoDayButton(
                     task: widget.task,
                     tasks: widget.tasks,
                     today: widget.today),

@@ -1,4 +1,4 @@
-import 'package:dis_week/utils/utils.dart';
+import 'package:dis_week/utils/Utils.dart';
 
 class TagOperations {
   static Future<Tag> createGlobalTag(Tag tag) async {

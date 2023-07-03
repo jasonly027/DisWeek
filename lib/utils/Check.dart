@@ -9,7 +9,7 @@ class Check {
         isChecked = json['isChecked'] as bool;
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'isChecked': isChecked,
-  };
+        'title': title,
+        'isChecked': isChecked,
+      };
 }

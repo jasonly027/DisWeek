@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../config/color_schemes.g.dart';
 
 void main() async {
-  runApp(DisWeek());
+  runApp(const DisWeek());
 }
 
 class DisWeek extends StatelessWidget {
-  DisWeek({super.key});
+  const DisWeek({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,12 @@ class DisWeek extends StatelessWidget {
 
     return MaterialApp(
         title: 'DisWeek',
-        // theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-        theme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+        themeMode: ThemeMode.system,
+        theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
         darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-        home: DailyViewScreen(today: today, pushToWeekView: true,));
+        home: DailyViewScreen(
+          today: today,
+          pushToWeekView: true,
+        ));
   }
 }

@@ -1,4 +1,4 @@
-export 'due.dart';
-export 'progressIndicator.dart';
+export 'dueBox.dart';
+export 'progressButton.dart';
 export 'taskTitle.dart';
 export 'tagBox.dart';

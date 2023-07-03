@@ -60,12 +60,12 @@ class _DayCardState extends State<DayCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Header(WeekViewScreen.weekDays[widget.currentDay]),
-                  Add(
+                  AddButton(
                     currentDateTime: widget.currentDateTime,
                     globalTags: widget.globalTags,
                     rebuildDayCard: rebuildDayCard,
                   ),
-                  Date(widget.currentDateTime)
+                  DateText(widget.currentDateTime)
                 ],
               ),
             ),
@@ -74,6 +74,7 @@ class _DayCardState extends State<DayCard> {
       ),
     );
   }
+
   void rebuildDayCard() {
     setState(() {});
   }

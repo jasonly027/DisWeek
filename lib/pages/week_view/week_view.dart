@@ -48,15 +48,10 @@ class _WeekViewScreenState extends State<WeekViewScreen> {
               color: theme.onPrimaryContainer, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          color: theme.onPrimaryContainer,
-          onPressed: () {},
-        ),
         actions: <Widget>[
           IconButton(
               onPressed: () {
-                weekPickerDialog(
+                WeekPickerDialog(
                     context: context,
                     today: widget.today,
                     globalTags: widget.globalTags);
