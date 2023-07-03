@@ -1,4 +1,4 @@
-import 'package:dis_week/pages/task_view/task_view.dart';
+import 'package:dis_week/screens/task_view/task_view.dart';
 import 'package:dis_week/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

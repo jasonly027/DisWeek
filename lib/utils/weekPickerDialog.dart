@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_date_pickers/flutter_date_pickers.dart';
-import '../pages/week_view/week_view.dart';
+import '../screens/week_view/week_view.dart';
 import 'Tag.dart';
 
 Future WeekPickerDialog(
