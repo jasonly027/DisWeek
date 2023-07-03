@@ -1,6 +1,5 @@
-import 'package:dis_week/utils/database/tagOperations.dart';
 import 'package:flutter/material.dart';
-import 'utils.dart';
+import 'Utils.dart';
 
 Tag getGlobalTag(int id, List<Tag> globalTags) {
   return globalTags.firstWhere((tag) => tag.id == id);

@@ -56,7 +56,7 @@ class _WeekViewScreenState extends State<WeekViewScreen> {
         actions: <Widget>[
           IconButton(
               onPressed: () {
-                weekPickerDialog(
+                WeekPickerDialog(
                     context: context,
                     today: widget.today,
                     globalTags: widget.globalTags);

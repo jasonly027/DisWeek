@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Date extends StatelessWidget {
-  const Date(this.date, {Key? key}) : super(key: key);
+class DateText extends StatelessWidget {
+  const DateText(this.date, {Key? key}) : super(key: key);
 
   final DateTime date;
 

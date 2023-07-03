@@ -3,11 +3,11 @@ import '../../../../../utils/database/taskOperations.dart';
 
 class TaskTitleList extends StatelessWidget {
   TaskTitleList(this.currentDateTime, {Key? key})
-      : taskStats = TaskOperations.readTaskTitlesAndIsUrgent(currentDateTime),
+      : taskStats = TaskOperations.readTaskTitlesAndUrgency(currentDateTime),
         super(key: key);
 
   final DateTime currentDateTime;
-  final Future<List<({String? title, bool isUrgent})>?> taskStats;
+  final Future<List<({String? title, int urgency})>?> taskStats;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,7 @@ class TaskTitleList extends StatelessWidget {
                   ],
                 );
               } else {
-                List<({String? title, bool isUrgent})> taskStats =
-                    snapshot.data;
+                List<({String? title, int urgency})> taskStats = snapshot.data;
 
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -57,9 +56,15 @@ class TaskTitleList extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                          color: taskStats[taskIndex].isUrgent
-                              ? theme.errorContainer
-                              : theme.onSecondary),
+                          color: () {
+                            if (taskStats[taskIndex].urgency == -1) {
+                              return theme.tertiaryContainer;
+                            }
+                            if (taskStats[taskIndex].urgency == 1) {
+                              return theme.errorContainer;
+                            }
+                            return theme.onSecondary;
+                          }()),
                     );
                   },
                 );

@@ -37,10 +37,10 @@ class Tag {
         globalOrder = json[TagFields.globalOrder] as int?;
 
   Map<String, dynamic> toJson() => {
-        TagFields.id : id,
-        TagFields.name : name,
-        TagFields.color : color.value,
-        TagFields.globalOrder : globalOrder
+        TagFields.id: id,
+        TagFields.name: name,
+        TagFields.color: color.value,
+        TagFields.globalOrder: globalOrder
       };
 
   bool equals(Tag other) {

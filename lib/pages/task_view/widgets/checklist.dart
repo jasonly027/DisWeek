@@ -114,6 +114,7 @@ class _ChecklistState extends State<Checklist> {
                     widget.task.checklist!.add(Check());
                     widget.task.isDone = false;
                     TaskOperations.updateTask(widget.task);
+                    Scrollable.ensureVisible(context);
                   });
                 },
                 style: TextButton.styleFrom(

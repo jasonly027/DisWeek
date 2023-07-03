@@ -1,23 +1,17 @@
-import 'dart:io';
 import 'package:dis_week/pages/task_view/task_view.dart';
-import 'package:dis_week/utils/utils.dart';
-import 'package:dis_week/utils/database/tagOperations.dart';
+import 'package:dis_week/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../utils/weekPickerDialog.dart';
 import '../week_view/week_view.dart';
 import './widgets/widgets.dart';
 
 class DailyViewScreen extends StatefulWidget {
-  const DailyViewScreen(
-      {super.key, required this.today, bool? pushToWeekView, this.todayStats})
+  const DailyViewScreen({super.key, required this.today, bool? pushToWeekView})
       : pushToWeekView = pushToWeekView ?? false;
 
   final DateTime today;
   final bool pushToWeekView;
-  final ({String? title, DateTime? due, bool isDone})? todayStats;
 
   @override
   State<DailyViewScreen> createState() => _DailyViewScreenState();
@@ -75,26 +69,15 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
                 ),
                 centerTitle: true,
                 leading: IconButton(
-                  icon: const Icon(Icons.menu),
-                  color: theme.onPrimaryContainer,
-                  onPressed: () {
-                    setState(() {
-                      // getApplicationDocumentsDirectory().then((value) {
-                      //   File(join(value.path, 'DisWeekTasks.db')).delete();
-                      // });
-                    });
-                  },
-                ),
+                    onPressed: () {
+                      WeekPickerDialog(
+                          context: context,
+                          today: widget.today,
+                          globalTags: globalTags);
+                    },
+                    color: theme.onPrimaryContainer,
+                    icon: const Icon(Icons.calendar_month)),
                 actions: <Widget>[
-                  IconButton(
-                      onPressed: () {
-                        weekPickerDialog(
-                            context: context,
-                            today: widget.today,
-                            globalTags: globalTags);
-                      },
-                      color: theme.onPrimaryContainer,
-                      icon: const Icon(Icons.calendar_month)),
                   IconButton(
                     onPressed: () {
                       TaskOperations.createTask(Task(doDay: widget.today))
@@ -198,7 +181,7 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
                             ),
                             Expanded(
                                 flex: 3,
-                                child: ProgressIndicatorCustom(
+                                child: ProgressButton(
                                   task: tasks[index],
                                   tasks: tasks,
                                   tags: globalTags,
