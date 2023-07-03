@@ -4,16 +4,21 @@ import 'package:dis_week/utils/Utils.dart';
 
 class ProgressButton extends StatefulWidget {
   const ProgressButton(
-      {super.key, required this.task, required this.tasks, required this.tags, required this.today});
+      {super.key,
+      required this.task,
+      required this.tasks,
+      required this.tags,
+      required this.today,
+      required this.triggerReadFromDB});
 
   final Task task;
   final List<Task> tasks;
   final List<Tag> tags;
   final DateTime today;
+  final void Function() triggerReadFromDB;
 
   @override
-  State<ProgressButton> createState() =>
-      _ProgressButtonState();
+  State<ProgressButton> createState() => _ProgressButtonState();
 }
 
 class _ProgressButtonState extends State<ProgressButton> {
@@ -70,10 +75,10 @@ class _ProgressButtonState extends State<ProgressButton> {
               Icons.close,
               size: 40,
               color: Task.isUrgent(widget.task)
-                ? Theme.of(context).brightness == Brightness.light
-                    ? theme.onError
-                    : theme.onErrorContainer
-                : theme.onSurface,
+                  ? Theme.of(context).brightness == Brightness.light
+                      ? theme.onError
+                      : theme.onErrorContainer
+                  : theme.onSurface,
             ));
       } else {
         return ElevatedButton(
@@ -94,7 +99,7 @@ class _ProgressButtonState extends State<ProgressButton> {
                             today: widget.today,
                           )))
                   .then((value) {
-                setState(() {});
+                  widget.triggerReadFromDB();
               });
             }
           },

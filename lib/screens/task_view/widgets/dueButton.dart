@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:dis_week/utils/Notifications.dart';
 import 'package:dis_week/utils/database/taskOperations.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../../../utils/Task.dart';
 import 'header.dart';
+import 'package:intl/intl.dart';
 
 class DueButton extends StatefulWidget {
   const DueButton({

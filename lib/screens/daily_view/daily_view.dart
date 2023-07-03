@@ -1,10 +1,8 @@
-import 'package:dis_week/screens/task_view/task_view.dart';
-import 'package:dis_week/utils/Utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../../utils/weekPickerDialog.dart';
-import '../week_view/week_view.dart';
+import 'package:dis_week/utils/Utils.dart';
+import 'package:dis_week/utils/Screens.dart';
 import './widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 class DailyViewScreen extends StatefulWidget {
   const DailyViewScreen({super.key, required this.today, bool? pushToWeekView})
@@ -18,15 +16,12 @@ class DailyViewScreen extends StatefulWidget {
 }
 
 class _DailyViewScreenState extends State<DailyViewScreen> {
-  late Future<List<List>> dataFromDB;
+  late Future<List<List>> databaseData;
 
   @override
   void initState() {
     super.initState();
-    dataFromDB = TaskDatabase.multiRead([
-      TaskOperations.readTasksOnDayOf(widget.today),
-      TagOperations.readAllGlobalTags()
-    ]);
+    readFromDB(init: true);
   }
 
   @override
@@ -35,7 +30,7 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
     final String todayStr = DateFormat.MMMd().format(widget.today);
 
     return FutureBuilder(
-        future: dataFromDB,
+        future: databaseData,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState != ConnectionState.done ||
               !snapshot.hasData) {
@@ -111,12 +106,7 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
                             builder: (context) => WeekViewScreen(
                                 today: widget.today, globalTags: globalTags)))
                         .then((value) {
-                      setState(() {
-                        dataFromDB = TaskDatabase.multiRead([
-                          TaskOperations.readTasksOnDayOf(widget.today),
-                          TagOperations.readAllGlobalTags()
-                        ]);
-                      });
+                          readFromDB();
                     });
                   } else {
                     Navigator.pop(context);
@@ -186,6 +176,7 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
                                   tasks: tasks,
                                   tags: globalTags,
                                   today: widget.today,
+                                  triggerReadFromDB: readFromDB,
                                 )),
                           ],
                         ),
@@ -197,5 +188,16 @@ class _DailyViewScreenState extends State<DailyViewScreen> {
             );
           }
         });
+  }
+
+  void readFromDB({bool init = false}) {
+    databaseData = TaskDatabase.multiRead([
+      TaskOperations.readTasksOnDayOf(widget.today),
+      TagOperations.readAllGlobalTags()
+    ]);
+
+    if (!init) {
+      setState(() {});
+    }
   }
 }

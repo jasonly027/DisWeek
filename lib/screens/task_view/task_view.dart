@@ -1,7 +1,7 @@
-import 'package:dis_week/utils/Task.dart';
-import 'package:dis_week/utils/database/taskOperations.dart';
 import 'package:flutter/material.dart';
+import 'package:dis_week/utils/Task.dart';
 import '../../utils/Tag.dart';
+import 'package:dis_week/utils/database/taskOperations.dart';
 import 'widgets/widgets.dart';
 
 class TaskViewScreen extends StatefulWidget {

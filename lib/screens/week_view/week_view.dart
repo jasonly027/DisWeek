@@ -48,17 +48,15 @@ class _WeekViewScreenState extends State<WeekViewScreen> {
               color: theme.onPrimaryContainer, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                WeekPickerDialog(
-                    context: context,
-                    today: widget.today,
-                    globalTags: widget.globalTags);
-              },
-              color: theme.onPrimaryContainer,
-              icon: const Icon(Icons.calendar_month)),
-        ],
+        leading: IconButton(
+            onPressed: () {
+              WeekPickerDialog(
+                  context: context,
+                  today: widget.today,
+                  globalTags: widget.globalTags);
+            },
+            color: theme.onPrimaryContainer,
+            icon: const Icon(Icons.calendar_month)),
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),

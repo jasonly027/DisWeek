@@ -46,4 +46,27 @@ class Tag {
   bool equals(Tag other) {
     return id == other.id;
   }
+
+  static const List<Color> tagColors = [
+    Colors.redAccent,
+    Colors.deepOrangeAccent,
+    Colors.amber,
+    Colors.lightGreenAccent,
+    Colors.lightGreen,
+    Colors.green,
+    Colors.greenAccent,
+    Colors.cyan,
+    Colors.lightBlueAccent,
+    Colors.lightBlue,
+    Colors.blueGrey,
+    Colors.indigo,
+    Colors.deepPurple,
+    Colors.purple,
+    Colors.pinkAccent,
+    Colors.pink,
+    Colors.brown,
+    Colors.black,
+    Colors.grey,
+    Colors.white,
+  ];
 }

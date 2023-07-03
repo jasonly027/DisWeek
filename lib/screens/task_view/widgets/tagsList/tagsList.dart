@@ -14,29 +14,6 @@ class TagsList extends StatefulWidget {
 
   final Task task;
   final List<Tag> globalTags;
-  static const List<Color> tagColors = [
-    Colors.redAccent,
-    Colors.deepOrangeAccent,
-    Colors.amber,
-    Colors.lightGreenAccent,
-    Colors.lightGreen,
-    Colors.green,
-    Colors.greenAccent,
-    Colors.cyan,
-    Colors.lightBlueAccent,
-    Colors.lightBlue,
-    Colors.blueGrey,
-    Colors.indigo,
-    Colors.deepPurple,
-    Colors.purple,
-    Colors.pinkAccent,
-    Colors.pink,
-    Colors.brown,
-    Colors.black,
-    Colors.grey,
-    Colors.white,
-  ];
-
   @override
   State<TagsList> createState() => _TagsListState();
 }
@@ -83,7 +60,6 @@ class _TagsListState extends State<TagsList> {
                                         0.80,
                                     child: Scrollbar(
                                       thumbVisibility: true,
-                                      trackVisibility: true,
                                       child: ReorderableListView(
                                         physics: const BouncingScrollPhysics(),
                                         onReorder: (oldIndex, tempNewIndex) {
@@ -209,7 +185,7 @@ class _TagsListState extends State<TagsList> {
                                                                                 color: newColor);
                                                                           }),
                                                                           availableColors:
-                                                                              TagsList.tagColors,
+                                                                              Tag.tagColors,
                                                                         )),
                                                                       )).then(
                                                               (value) =>
@@ -268,12 +244,7 @@ class _TagsListState extends State<TagsList> {
                                         onPressed: () {
                                           TagOperations.createGlobalTag(Tag(
                                                   color: Colors.white,
-                                                  globalOrder: widget
-                                                          .globalTags.isNotEmpty
-                                                      ? (widget.globalTags.last
-                                                              .globalOrder! +
-                                                          1)
-                                                      : 0))
+                                                  globalOrder: widget .globalTags.isNotEmpty ? (widget.globalTags.last .globalOrder! + 1) : 0))
                                               .then((value) {
                                             setDialogState(() {
                                               Tag newTag = value;
