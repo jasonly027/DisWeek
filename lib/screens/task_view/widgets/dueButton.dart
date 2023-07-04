@@ -111,8 +111,8 @@ class _DueButtonState extends State<DueButton> {
               icon: Icon(
                 Icons.notifications,
                 color: widget.task.notify == null
-                    ? null
-                    : theme.onTertiaryContainer,
+                    ? theme.secondary
+                    : Colors.lightBlue,
               ),
             ),
           ),
